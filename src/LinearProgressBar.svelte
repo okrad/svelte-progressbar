@@ -45,18 +45,18 @@
 </style>
 
 <svg viewBox="0 0 100 16" xmlns="http://www.w3.org/2000/svg">
-	{#if style == 'default'}
 		<defs>
 			<linearGradient id="{grId}">
 				{#each series as serie}
 					<Stop {...serie} {overallPerc}/>
 				{/each}
 			</linearGradient>
-			<mask id="{maskId}" x="0" y="0" width="100" height="100%">
-				<rect width="{100 - $overallPerc}%" height="100%" x="{$overallPerc}%" y="0" fill="#fff" />
-			</mask>
+			{#if style == 'default'}
+				<mask id="{maskId}" x="0" y="0" width="100" height="100%">
+					<rect width="{100 - $overallPerc}%" height="100%" x="{$overallPerc}%" y="0" fill="#fff" />
+				</mask>
+			{/if}
 		</defs>
-	{/if}
 
 	<rect width="100" height="{barHeight}%" {rx} {ry} y="{ypos}%" class="progressbar"></rect>
 	<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} fill="url(#{grId})"></rect>
