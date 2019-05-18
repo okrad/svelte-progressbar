@@ -5,7 +5,7 @@ const prod = mode === 'production';
 
 module.exports = {
 	entry: {
-		progressbar: ['./src/main.js']
+		'svelte-progressbar': ['./src/main.js']
 	},
 	resolve: {
 		extensions: ['.mjs', '.js', '.svelte']
