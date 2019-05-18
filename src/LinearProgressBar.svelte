@@ -59,10 +59,11 @@
 		</defs>
 
 	<rect width="100" height="{barHeight}%" {rx} {ry} y="{ypos}%" class="progressbar"></rect>
-	<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} fill="url(#{grId})"></rect>
 	{#if style == 'thin'}
+		<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} y="{100 - barHeight}%" fill="url(#{grId})"></rect>
 		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 	{:else}
+		<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} fill="url(#{grId})"></rect>
 		<text class="progress-value progress-value-negative" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 		<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 	{/if}
