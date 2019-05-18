@@ -1,1 +1,53 @@
-TEST
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Svelte progress bar examples</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="scripts/svelte-progressbar.js"></script>
+	<link rel="stylesheet" href="css/svelte-progressbar.css">
+</head>
+<body>
+	<section class="examples">
+		<h2>Examples</h2>
+		<div id="demo1"></div>
+		<div id="demo2"></div>
+		<div id="demo3"></div>
+		<div id="demo4"></div>
+	</section>
+
+	<script>
+		const pb1 = new ProgressBar({
+			target: document.getElementById('demo1'),
+			props: {
+				series: 60,
+			}
+		});
+
+		const pb2 = new ProgressBar({
+			target: document.getElementById('demo2'),
+			props: {
+				series: [40, 25]
+			}
+		});
+
+		const pb3 = new ProgressBar({
+			target: document.getElementById('demo3'),
+			style: 'thin',
+			props: {
+				series: [30, 15]
+			}
+		});
+
+		const pb4 = new ProgressBar({
+			target: document.getElementById('demo4'),
+			style: 'radial',
+			props: {
+				series: [30, 15]
+			}
+		});
+	</script>
+</body>
+</html>

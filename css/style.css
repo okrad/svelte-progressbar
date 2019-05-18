@@ -1,0 +1,4 @@
+.examples {
+	display: flex;
+	flex-flow: row;
+}
