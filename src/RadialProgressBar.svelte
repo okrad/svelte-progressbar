@@ -18,7 +18,7 @@
 		stroke: #f1f1f1;
 	}
 	.progress-value {
-		font-size: 8;
+		font-size: 50%;
 	}
 </style>
 

@@ -40,7 +40,7 @@
 	}
 
 	.progress-value {
-		font-size: 8;
+		font-size: 50%;
 	}
 
 	.progress-value-inverted {
