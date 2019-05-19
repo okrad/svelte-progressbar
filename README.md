@@ -32,7 +32,9 @@ const pb = new ProgressBar({
         }
 });
 ```
-This creates a radial progressbar with 2 series (20% + 10%)
+This creates a radial progressbar with 2 series (20% + 10%).
+
+Take a look at some [working examples](https://okrad.github.io/svelte-progressbar)!
 
 # API
 **ProgressBar(options)**: The constructor. Available props are:
