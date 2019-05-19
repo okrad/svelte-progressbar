@@ -7,6 +7,21 @@ If rendered as a linear progressbar there are 2 styles supported:
 * Thin: the progression bars are rendered as thin bars and the values are placed externally
 
 # Usage
+
+## From npm
+
+```
+npm i @okrad/svelte-progressbar
+```
+
+```
+import ProgressBar from '@okrad/svelte-progressbar';
+import '@okrad/svelte-progressbar/dist/svelte-progressbar.css';
+
+```
+
+## From source
+
 ```
 npm run build
 ```
