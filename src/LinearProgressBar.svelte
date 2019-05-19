@@ -19,8 +19,8 @@
 	let ypos = 0;
 	if(style == 'thin') {
 		barHeight = 5;
-		rx = .5;
-		ry = .5;
+		rx = .2;
+		ry = .2;
 		ypos = 100 - barHeight;
 	}
 
@@ -35,36 +35,40 @@
 </script>
 
 <style>
-	.progressbar {
+	.progress-bg {
 		fill: #f1f1f1;
 	}
 
-	.progress-value-negative {
+	.progress-value {
+		font-size: 8;
+	}
+
+	.progress-value-inverted {
 		fill: #fff;
 	}
+
 </style>
 
-<svg viewBox="0 0 100 16" xmlns="http://www.w3.org/2000/svg">
-		<defs>
-			<linearGradient id="{grId}">
-				{#each series as serie}
-					<Stop {...serie} {overallPerc}/>
-				{/each}
-			</linearGradient>
-			{#if style == 'default'}
-				<mask id="{maskId}" x="0" y="0" width="100" height="100%">
-					<rect width="{100 - $overallPerc}%" height="100%" x="{$overallPerc}%" y="0" fill="#fff" />
-				</mask>
-			{/if}
-		</defs>
+<svg class="progressbar" viewBox="0 0 100 16" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<linearGradient id="{grId}">
+			{#each series as serie}
+				<Stop {...serie} {overallPerc}/>
+			{/each}
+		</linearGradient>
+		{#if style == 'default'}
+			<mask id="{maskId}" x="0" y="0" width="100" height="100%">
+				<rect width="{100 - $overallPerc}%" height="100%" x="{$overallPerc}%" y="0" fill="#fff" />
+			</mask>
+		{/if}
+	</defs>
 
-	<rect width="100" height="{barHeight}%" {rx} {ry} y="{ypos}%" class="progressbar"></rect>
+	<rect width="100" height="{barHeight}%" {rx} {ry} y="{ypos}%" class="progress-bg"></rect>
+	<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} y="{100 - barHeight}%" fill="url(#{grId})"></rect>
 	{#if style == 'thin'}
-		<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} y="{100 - barHeight}%" fill="url(#{grId})"></rect>
-		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
+		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="75%">{$valStore}</text>
 	{:else}
-		<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} fill="url(#{grId})"></rect>
-		<text class="progress-value progress-value-negative" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
+		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 		<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 	{/if}
 </svg>

@@ -9,9 +9,9 @@
 	export let style = 'default'; // [thin, radial]
 
 	export let colors = [
-		'#fbd542',
-		'#5fc65b',
-		'#a00'
+		'#FFC107',
+		'#4CAF50',
+		'#03A9F4'
 	];
 
 	export let series = [];
