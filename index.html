@@ -10,12 +10,98 @@
 	<link rel="stylesheet" href="css/svelte-progressbar.css">
 </head>
 <body>
+
+	<h1>Svelte Progress bar</h1>
+	<a href="https://github.com/okrad/svelte-progressbar" class="github-fork">
+		<img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1">
+	</a>
+
+	<p>A multi-series SVG progress bar component made with Svelte 3. It can be rendered both as a linear or radial progressbar. Progression bars and values are fully animated.</p>
+
+	<p>If rendered as a linear progressbar there are 2 styles supported:</p>
+	<ul>
+    	<li>
+			Standard: featuring inverted text color for the values
+		</li>
+		<li>
+			Thin: the progression bars are rendered as thin bars and the values are placed externally
+		</li>
+	</ul>
+
+	<h2>Examples</h2>
+
 	<section class="examples">
-		<h2>Examples</h2>
-		<div id="demo1"></div>
-		<div id="demo2"></div>
-		<div id="demo3"></div>
-		<div id="demo4"></div>
+		<div class="sample">
+			<h3>A standard progress bar with 1 series</h3>
+
+			<div class="demo">
+				<div id="demo1"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo1'),
+	props: {
+		series: 60,
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
+		<div class="sample">
+			<h3>A standard progress bar with 2 series</h3>
+			<div class="demo">
+				<div id="demo2"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo2'),
+	props: {
+		series: [40, 25]
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
+		<div class="sample">
+			<h3>
+				A thin progress bar with 2 series
+			</h3>
+			<div class="demo">
+				<div id="demo3"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo3'),
+	props: {
+		style: 'thin',
+		series: [30, 15]
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
+		<div class="sample">
+			<h3>
+				A radial progress bar with 2 series
+			</h3>
+			<div class="demo">
+				<div id="demo4"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo4'),
+	props: {
+		style: 'radial',
+		series: [30, 15]
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
 	</section>
 
 	<script>
@@ -35,16 +121,16 @@
 
 		const pb3 = new ProgressBar({
 			target: document.getElementById('demo3'),
-			style: 'thin',
 			props: {
+				style: 'thin',
 				series: [30, 15]
 			}
 		});
 
 		const pb4 = new ProgressBar({
 			target: document.getElementById('demo4'),
-			style: 'radial',
 			props: {
+				style: 'radial',
 				series: [30, 15]
 			}
 		});
