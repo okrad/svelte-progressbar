@@ -30,4 +30,4 @@
 
 	}
 </script>
-<path d="{describeArc(50, 50, 50, $prevOffset, $offset)}" fill="transparent" stroke="{color}"/>
+<path d="{describeArc(50, 50, 49, $prevOffset, $offset)}" fill="transparent" stroke="{color}"/>

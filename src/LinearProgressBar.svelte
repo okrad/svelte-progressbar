@@ -66,7 +66,7 @@
 	<rect width="100" height="{barHeight}%" {rx} {ry} y="{ypos}%" class="progress-bg"></rect>
 	<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} y="{100 - barHeight}%" fill="url(#{grId})"></rect>
 	{#if style == 'thin'}
-		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="75%">{$valStore}</text>
+		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="70%">{$valStore}</text>
 	{:else}
 		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 		<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
