@@ -1,0 +1,2 @@
+Made my first @sveltejs component! It's a multiseries, SVG progress bar that can be rendered with a linear or radial layout. It's been really a fun and inspiring experience, thank you @Rich_Harris for such a mindblowing technology!
+https://github.com/okrad/svelte-progressbar
