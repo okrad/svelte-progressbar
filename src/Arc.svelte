@@ -2,6 +2,10 @@
 	export let offset;
 	export let prevOffset;
 	export let color;
+	export let thickness;
+
+	if(!thickness)
+		thickness = 2;
 
 	//Based om https://stackoverflow.com/q/5736398
 	function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
@@ -30,4 +34,4 @@
 
 	}
 </script>
-<path d="{describeArc(50, 50, 49, $prevOffset, $offset)}" fill="transparent" stroke="{color}"/>
+<path d="{describeArc(50, 50, 49.5 - thickness / 2, $prevOffset, $offset)}" fill="transparent" stroke="{color}" stroke-width="{thickness}"/>

@@ -7,6 +7,8 @@
 	import LinearProgressBar from './LinearProgressBar.svelte';
 
 	export let style = 'default'; // [thin, radial]
+	export let height = 16;
+	export let thickness;
 
 	export let colors = [
 		'#FFC107',
@@ -53,6 +55,7 @@
 			s.offset.set(cumOffset);
 		});
 	}
+
 	setContext('valStore', valStore);
 
 	export function updatePerc(perc, seriesIdx = 0) {
@@ -61,7 +64,7 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar series={series} />
+	<RadialProgressBar {series} {thickness} />
 {:else}
-	<LinearProgressBar series={series} {style} />
+	<LinearProgressBar {series} {style} {height} {thickness} />
 {/if}

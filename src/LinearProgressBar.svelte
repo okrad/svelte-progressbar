@@ -8,6 +8,8 @@
 	export let style = 'default';
 	export let rx = 2;
 	export let ry = 2;
+	export let height = 16;
+	export let thickness;
 
 	const valStore = getContext('valStore');
 
@@ -15,13 +17,16 @@
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
 	const grId = 'pb_gradient_' + ts + Math.floor(Math.random() * 999);
 
-	let barHeight = 100;
 	let ypos = 0;
 	if(style == 'thin') {
-		barHeight = 5;
+		if(!thickness)
+			thickness = 5;
 		rx = .2;
 		ry = .2;
-		ypos = 100 - barHeight;
+		ypos = 100 - thickness;
+	}
+	else {
+		thickness = 100;
 	}
 
 	const overallPerc = tweened(0.1, {
@@ -49,7 +54,7 @@
 
 </style>
 
-<svg class="progressbar" viewBox="0 0 100 16" xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar" viewBox="0 0 100 {height}" xmlns="http://www.w3.org/2000/svg">
 	<defs>
 		<linearGradient id="{grId}">
 			{#each series as serie}
@@ -63,10 +68,10 @@
 		{/if}
 	</defs>
 
-	<rect width="100" height="{barHeight}%" {rx} {ry} y="{ypos}%" class="progress-bg"></rect>
-	<rect width="{$overallPerc}%" height="{barHeight}%" {rx} {ry} y="{100 - barHeight}%" fill="url(#{grId})"></rect>
+	<rect width="100" height="{thickness}%" {rx} {ry} y="{ypos}%" class="progress-bg"></rect>
+	<rect width="{$overallPerc}%" height="{thickness}%" {rx} {ry} y="{100 - thickness}%" fill="url(#{grId})"></rect>
 	{#if style == 'thin'}
-		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="70%">{$valStore}</text>
+		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="{75 - thickness}%">{$valStore}</text>
 	{:else}
 		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 		<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
