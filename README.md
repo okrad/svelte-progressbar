@@ -55,5 +55,6 @@ Take a look at some [working examples](https://okrad.github.io/svelte-progressba
 **ProgressBar(options)**: The constructor. Available props are:
 * series (number | object | array): for single series progressbars, it can be a number indicating the progression percentage (0-100), or a json object with "perc" and "color" properties.
 * style: can be "standard" (default), "thin" or "radial"
-
+* height: for standard and thin progress bars, determines the height of the whole component
+* thickness: for thin progress bars, specifies the thickness of the bar as a percentage of the total height of the component. For radial progress bars, determines the thickness of the bar as a unitless number between 0 and 50 (corresponding to the ray of the circle).
 **updatePerc(perc, seriesId = 0)**: update the specified series progress percentage
