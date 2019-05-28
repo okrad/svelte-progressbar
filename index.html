@@ -85,7 +85,7 @@ new ProgressBar({
 		</div>
 		<div class="sample">
 			<h3>
-				A radial progress bar with 2 series
+				A thin progress bar with 1 series and 20% thickness
 			</h3>
 			<div class="demo">
 				<div id="demo4"></div>
@@ -93,6 +93,26 @@ new ProgressBar({
 					<pre><code>
 new ProgressBar({
 	target: document.getElementById('demo4'),
+	props: {
+		style: 'thin',
+		series: 30,
+		thickness: 20
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
+		<div class="sample">
+			<h3>
+				A radial progress bar with 2 series
+			</h3>
+			<div class="demo">
+				<div id="demo5"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo5'),
 	props: {
 		style: 'radial',
 		series: [30, 15]
@@ -102,24 +122,44 @@ new ProgressBar({
 				</div>
 			</div>
 		</div>
+		<div class="sample">
+			<h3>
+				A radial progress bar with 1 series and bar thickness of 10
+			</h3>
+			<div class="demo">
+				<div id="demo6"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo6'),
+	props: {
+		style: 'radial',
+		series: 30,
+		thickness: 10
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
 	</section>
 
 	<script>
-		const pb1 = new ProgressBar({
+		new ProgressBar({
 			target: document.getElementById('demo1'),
 			props: {
 				series: 49,
 			}
 		});
 
-		const pb2 = new ProgressBar({
+		new ProgressBar({
 			target: document.getElementById('demo2'),
 			props: {
 				series: [40, 25]
 			}
 		});
 
-		const pb3 = new ProgressBar({
+		new ProgressBar({
 			target: document.getElementById('demo3'),
 			props: {
 				style: 'thin',
@@ -127,11 +167,29 @@ new ProgressBar({
 			}
 		});
 
-		const pb4 = new ProgressBar({
+		new ProgressBar({
 			target: document.getElementById('demo4'),
+			props: {
+				style: 'thin',
+				series: 30,
+				thickness: 20
+			}
+		});
+
+		new ProgressBar({
+			target: document.getElementById('demo5'),
 			props: {
 				style: 'radial',
 				series: [30, 15]
+			}
+		});
+
+		new ProgressBar({
+			target: document.getElementById('demo6'),
+			props: {
+				style: 'radial',
+				series: 30,
+				thickness: 10
 			}
 		});
 	</script>
