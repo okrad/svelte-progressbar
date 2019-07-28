@@ -4,3 +4,5 @@ yarn.lock
 package-lock.json
 index.js
 index.mjs
+index.css
+index.css.map
