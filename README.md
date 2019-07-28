@@ -14,18 +14,53 @@ If rendered as a linear progressbar there are 2 styles supported:
 npm i @okrad/svelte-progressbar
 ```
 
+### Using in a standard npm module
+
 ```
 import ProgressBar from '@okrad/svelte-progressbar';
-import '@okrad/svelte-progressbar/dist/svelte-progressbar.css';
+
+const pb = new ProgressBar({
+        target: document.getElementById('demo'),
+        props: {
+                series: 20
+        }
+});
 
 ```
 
-## From source
+### Using in a Svelte app
+
+```
+//main.js
+import App from './App.svelte';
+
+const app = new App({
+        target: document.body,
+        props: {
+                name: 'world'
+        }
+});
+
+export default app;
+```
+
+```
+//App.svelte
+<script>
+  import ProgressBar from "@okrad/svelte-progressbar";
+
+  export let series = [20, 42];
+</script>
+
+<ProgressBar {series} />
+```
+
+## Building from source
 
 ```
 npm run build
 ```
-Creates dist/svelte-progressbar.js and dist/svelte-progressbar.css files.
+Creates index.js and index.css files.
 
 Include them in your html file, then instantiate the component:
 ```
