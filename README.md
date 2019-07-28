@@ -37,7 +37,7 @@ import App from './App.svelte';
 const app = new App({
         target: document.body,
         props: {
-                name: 'world'
+                series: [20, 42]
         }
 });
 
@@ -49,7 +49,7 @@ export default app;
 <script>
   import ProgressBar from "@okrad/svelte-progressbar";
 
-  export let series = [20, 42];
+  export let series = 0;
 </script>
 
 <ProgressBar {series} />
