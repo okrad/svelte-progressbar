@@ -8,7 +8,7 @@
 
 	export let style = 'default'; // [thin, radial]
 	export let height = 16;
-	export let thickness;
+	export let thickness = null;
 
 	export let colors = [
 		'#FFC107',

@@ -58,7 +58,8 @@
 	<defs>
 		<linearGradient id="{grId}">
 			{#each series as serie}
-				<Stop {...serie} {overallPerc}/>
+				<Stop prevOffset={serie.prevOffset} offset={serie.offset} color={serie.color} {overallPerc}/>
+				<!-- <Stop {...serie} {overallPerc}/> -->
 			{/each}
 		</linearGradient>
 		{#if style == 'default'}
