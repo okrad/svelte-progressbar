@@ -677,20 +677,18 @@
     	return child_ctx;
     }
 
-    // (62:1) {#each series as serie}
+    // (71:1) {#each series as serie}
     function create_each_block(ctx) {
     	var current;
 
-    	var arc_spread_levels = [
-    		ctx.serie,
-    		{ thickness: ctx.thickness }
-    	];
-
-    	let arc_props = {};
-    	for (var i = 0; i < arc_spread_levels.length; i += 1) {
-    		arc_props = assign(arc_props, arc_spread_levels[i]);
+    	var arc = new Arc({
+    		props: {
+    		offset: ctx.serie.offset,
+    		prevOffset: ctx.serie.prevOffset,
+    		color: ctx.serie.color,
+    		thickness: ctx.thickness
     	}
-    	var arc = new Arc({ props: arc_props });
+    	});
 
     	return {
     		c() {
@@ -703,10 +701,11 @@
     		},
 
     		p(changed, ctx) {
-    			var arc_changes = (changed.series || changed.thickness) ? get_spread_update(arc_spread_levels, [
-    				(changed.series) && ctx.serie,
-    				(changed.thickness) && { thickness: ctx.thickness }
-    			]) : {};
+    			var arc_changes = {};
+    			if (changed.series) arc_changes.offset = ctx.serie.offset;
+    			if (changed.series) arc_changes.prevOffset = ctx.serie.prevOffset;
+    			if (changed.series) arc_changes.color = ctx.serie.color;
+    			if (changed.thickness) arc_changes.thickness = ctx.thickness;
     			arc.$set(arc_changes);
     		},
 
@@ -729,7 +728,7 @@
     }
 
     function create_fragment$1(ctx) {
-    	var svg, defs, mask, circle0, circle0_r_value, circle1, text0, t0, text1, t1, text1_mask_value, current;
+    	var svg, defs, mask, circle0, circle0_r_value, circle1, text0, t0, text0_font_size_value, text1, t1, text1_mask_value, text1_font_size_value, svg_viewBox_value, current;
 
     	var arc_spread_levels = [
     		ctx.maskSerie,
@@ -780,23 +779,27 @@
     			attr(mask, "y", "0");
     			attr(mask, "width", "100");
     			attr(mask, "height", "100%");
-    			attr(circle1, "class", "progress-bg svelte-1lh8jvw");
+    			attr(circle1, "class", "progress-bg svelte-j462iq");
     			attr(circle1, "cx", "50");
     			attr(circle1, "cy", "50");
     			attr(circle1, "r", "49");
-    			attr(text0, "class", "progress-value progress-value-inverted svelte-1lh8jvw");
+    			attr(text0, "class", "progress-value progress-value-inverted svelte-j462iq");
     			attr(text0, "text-anchor", "middle");
     			attr(text0, "dominant-baseline", "central");
     			attr(text0, "x", "50%");
     			attr(text0, "y", "50%");
+    			attr(text0, "font-size", text0_font_size_value = "" + ctx.textSize + "%");
     			attr(text1, "mask", text1_mask_value = "url(#" + ctx.maskId + ")");
     			attr(text1, "class", "progress-value");
     			attr(text1, "text-anchor", "middle");
     			attr(text1, "dominant-baseline", "central");
     			attr(text1, "x", "50%");
     			attr(text1, "y", "50%");
-    			attr(svg, "class", "progressbar progressbar-radial svelte-1lh8jvw");
-    			attr(svg, "viewBox", "0 0 100 100");
+    			attr(text1, "font-size", text1_font_size_value = "" + ctx.textSize + "%");
+    			attr(svg, "class", "progressbar progressbar-radial svelte-j462iq");
+    			attr(svg, "viewBox", svg_viewBox_value = "0 0 " + vbWidth + " " + ctx.vbHeight);
+    			attr(svg, "width", ctx.width);
+    			attr(svg, "height", ctx.height);
     			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
     		},
 
@@ -854,7 +857,26 @@
 
     			if (!current || changed.$valStore) {
     				set_data(t0, ctx.$valStore);
+    			}
+
+    			if ((!current || changed.textSize) && text0_font_size_value !== (text0_font_size_value = "" + ctx.textSize + "%")) {
+    				attr(text0, "font-size", text0_font_size_value);
+    			}
+
+    			if (!current || changed.$valStore) {
     				set_data(t1, ctx.$valStore);
+    			}
+
+    			if ((!current || changed.textSize) && text1_font_size_value !== (text1_font_size_value = "" + ctx.textSize + "%")) {
+    				attr(text1, "font-size", text1_font_size_value);
+    			}
+
+    			if (!current || changed.width) {
+    				attr(svg, "width", ctx.width);
+    			}
+
+    			if (!current || changed.height) {
+    				attr(svg, "height", ctx.height);
     			}
     		},
 
@@ -888,16 +910,21 @@
     	};
     }
 
+    const vbWidth = 100;
+
     function instance$1($$self, $$props, $$invalidate) {
     	let $valStore;
 
     	
 
-    	let { series = [], thickness = null } = $$props;
+    	let { series = [], thickness = null, width = 100, height = 100 } = $$props;
+
+    	let textSize;
 
     	const ts = new Date().getTime();
     	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
     	const valStore = getContext('valStore'); subscribe($$self, valStore, $$value => { $valStore = $$value; $$invalidate('$valStore', $valStore); });
+    	const vbHeight = vbWidth * (height / width);
 
     	const twOpts = {
     		duration: 1000,
@@ -913,19 +940,26 @@
     	$$self.$set = $$props => {
     		if ('series' in $$props) $$invalidate('series', series = $$props.series);
     		if ('thickness' in $$props) $$invalidate('thickness', thickness = $$props.thickness);
+    		if ('width' in $$props) $$invalidate('width', width = $$props.width);
+    		if ('height' in $$props) $$invalidate('height', height = $$props.height);
     	};
 
     	$$self.$$.update = ($$dirty = { series: 1 }) => {
     		if ($$dirty.series) { {
     				maskSerie.prevOffset.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, 0));
+    				$$invalidate('textSize', textSize =  150 / series.length);
     			} }
     	};
 
     	return {
     		series,
     		thickness,
+    		width,
+    		height,
+    		textSize,
     		maskId,
     		valStore,
+    		vbHeight,
     		maskSerie,
     		$valStore
     	};
@@ -934,7 +968,7 @@
     class RadialProgressBar extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, ["series", "thickness"]);
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, ["series", "thickness", "width", "height"]);
     	}
     }
 
@@ -1031,20 +1065,18 @@
     	return child_ctx;
     }
 
-    // (60:3) {#each series as serie}
+    // (63:3) {#each series as serie}
     function create_each_block$1(ctx) {
     	var current;
 
-    	var stop_spread_levels = [
-    		ctx.serie,
-    		{ overallPerc: ctx.overallPerc }
-    	];
-
-    	let stop_props = {};
-    	for (var i = 0; i < stop_spread_levels.length; i += 1) {
-    		stop_props = assign(stop_props, stop_spread_levels[i]);
+    	var stop = new Stop({
+    		props: {
+    		prevOffset: ctx.serie.prevOffset,
+    		offset: ctx.serie.offset,
+    		color: ctx.serie.color,
+    		overallPerc: ctx.overallPerc
     	}
-    	var stop = new Stop({ props: stop_props });
+    	});
 
     	return {
     		c() {
@@ -1057,10 +1089,11 @@
     		},
 
     		p(changed, ctx) {
-    			var stop_changes = (changed.series || changed.overallPerc) ? get_spread_update(stop_spread_levels, [
-    				(changed.series) && ctx.serie,
-    				(changed.overallPerc) && { overallPerc: ctx.overallPerc }
-    			]) : {};
+    			var stop_changes = {};
+    			if (changed.series) stop_changes.prevOffset = ctx.serie.prevOffset;
+    			if (changed.series) stop_changes.offset = ctx.serie.offset;
+    			if (changed.series) stop_changes.color = ctx.serie.color;
+    			if (changed.overallPerc) stop_changes.overallPerc = ctx.overallPerc;
     			stop.$set(stop_changes);
     		},
 
@@ -1082,7 +1115,7 @@
     	};
     }
 
-    // (64:2) {#if style == 'default'}
+    // (67:2) {#if style == 'default'}
     function create_if_block_1(ctx) {
     	var mask, rect, rect_width_value, rect_x_value;
 
@@ -1125,7 +1158,7 @@
     	};
     }
 
-    // (75:1) {:else}
+    // (78:1) {:else}
     function create_else_block(ctx) {
     	var text0, t0, text1, t1, text1_mask_value;
 
@@ -1135,13 +1168,13 @@
     			t0 = text(ctx.$valStore);
     			text1 = svg_element("text");
     			t1 = text(ctx.$valStore);
-    			attr(text0, "class", "progress-value progress-value-inverted svelte-1g9ffop");
+    			attr(text0, "class", "progress-value progress-value-inverted svelte-gfj393");
     			attr(text0, "text-anchor", "middle");
     			attr(text0, "dominant-baseline", "central");
     			attr(text0, "x", "50%");
     			attr(text0, "y", "50%");
     			attr(text1, "mask", text1_mask_value = "url(#" + ctx.maskId + ")");
-    			attr(text1, "class", "progress-value svelte-1g9ffop");
+    			attr(text1, "class", "progress-value svelte-gfj393");
     			attr(text1, "text-anchor", "middle");
     			attr(text1, "dominant-baseline", "central");
     			attr(text1, "x", "50%");
@@ -1171,7 +1204,7 @@
     	};
     }
 
-    // (73:1) {#if style == 'thin'}
+    // (76:1) {#if style == 'thin'}
     function create_if_block(ctx) {
     	var text_1, t, text_1_y_value;
 
@@ -1179,11 +1212,11 @@
     		c() {
     			text_1 = svg_element("text");
     			t = text(ctx.$valStore);
-    			attr(text_1, "class", "progress-value svelte-1g9ffop");
+    			attr(text_1, "class", "progress-value svelte-gfj393");
     			attr(text_1, "text-anchor", "middle");
     			attr(text_1, "dominant-baseline", "central");
     			attr(text_1, "x", "50%");
-    			attr(text_1, "y", text_1_y_value = "" + (75 - ctx.thickness) + "%");
+    			attr(text_1, "y", text_1_y_value = "" + (65 - ctx.thickness) + "%");
     		},
 
     		m(target, anchor) {
@@ -1196,7 +1229,7 @@
     				set_data(t, ctx.$valStore);
     			}
 
-    			if ((changed.thickness) && text_1_y_value !== (text_1_y_value = "" + (75 - ctx.thickness) + "%")) {
+    			if ((changed.thickness) && text_1_y_value !== (text_1_y_value = "" + (65 - ctx.thickness) + "%")) {
     				attr(text_1, "y", text_1_y_value);
     			}
     		},
@@ -1254,7 +1287,7 @@
     			attr(rect0, "rx", ctx.rx);
     			attr(rect0, "ry", ctx.ry);
     			attr(rect0, "y", rect0_y_value = "" + ctx.ypos + "%");
-    			attr(rect0, "class", "progress-bg svelte-1g9ffop");
+    			attr(rect0, "class", "progress-bg svelte-gfj393");
     			attr(rect1, "width", rect1_width_value = "" + ctx.$overallPerc + "%");
     			attr(rect1, "height", rect1_height_value = "" + ctx.thickness + "%");
     			attr(rect1, "rx", ctx.rx);
@@ -1262,7 +1295,9 @@
     			attr(rect1, "y", rect1_y_value = "" + (100 - ctx.thickness) + "%");
     			attr(rect1, "fill", rect1_fill_value = "url(#" + ctx.grId + ")");
     			attr(svg, "class", "progressbar");
-    			attr(svg, "viewBox", svg_viewBox_value = "0 0 100 " + ctx.height);
+    			attr(svg, "viewBox", svg_viewBox_value = "0 0 100 " + ctx.vbHeight);
+    			attr(svg, "width", ctx.width);
+    			attr(svg, "height", ctx.height);
     			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
     		},
 
@@ -1365,8 +1400,12 @@
     				}
     			}
 
-    			if ((!current || changed.height) && svg_viewBox_value !== (svg_viewBox_value = "0 0 100 " + ctx.height)) {
-    				attr(svg, "viewBox", svg_viewBox_value);
+    			if (!current || changed.width) {
+    				attr(svg, "width", ctx.width);
+    			}
+
+    			if (!current || changed.height) {
+    				attr(svg, "height", ctx.height);
     			}
     		},
 
@@ -1397,23 +1436,24 @@
     	};
     }
 
+    const minOverallPerc = 0.001;
+
     function instance$3($$self, $$props, $$invalidate) {
     	let $overallPerc, $valStore;
 
     	
 
-    	let { series = [], style = 'default', rx = 2, ry = 2, height = 16, thickness } = $$props;
-
-    	const valStore = getContext('valStore'); subscribe($$self, valStore, $$value => { $valStore = $$value; $$invalidate('$valStore', $valStore); });
-
+    	let { series = [], style = 'default', rx = 2, ry = 2, width = 100, height = 16, thickness } = $$props;
     	const ts = new Date().getTime();
+    	const vbHeight = 100 * (height / width);
+    	const valStore = getContext('valStore'); subscribe($$self, valStore, $$value => { $valStore = $$value; $$invalidate('$valStore', $valStore); });
     	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
     	const grId = 'pb_gradient_' + ts + Math.floor(Math.random() * 999);
 
     	let ypos = 0;
     	if(style == 'thin') {
     		if(!thickness)
-    			$$invalidate('thickness', thickness = 5);
+    			$$invalidate('thickness', thickness = 10);
     		$$invalidate('rx', rx = .2);
     		$$invalidate('ry', ry = .2);
     		$$invalidate('ypos', ypos = 100 - thickness);
@@ -1422,7 +1462,8 @@
     		$$invalidate('thickness', thickness = 100);
     	}
 
-    	const overallPerc = tweened(0.1, {
+    	//Start with a number slightly greater than 0 to avoid divisions by zero when computing stops
+    	const overallPerc = tweened(minOverallPerc, {
     		duration: 1000,
     		easing: cubicOut
     	}); subscribe($$self, overallPerc, $$value => { $overallPerc = $$value; $$invalidate('$overallPerc', $overallPerc); });
@@ -1432,13 +1473,14 @@
     		if ('style' in $$props) $$invalidate('style', style = $$props.style);
     		if ('rx' in $$props) $$invalidate('rx', rx = $$props.rx);
     		if ('ry' in $$props) $$invalidate('ry', ry = $$props.ry);
+    		if ('width' in $$props) $$invalidate('width', width = $$props.width);
     		if ('height' in $$props) $$invalidate('height', height = $$props.height);
     		if ('thickness' in $$props) $$invalidate('thickness', thickness = $$props.thickness);
     	};
 
     	$$self.$$.update = ($$dirty = { series: 1 }) => {
     		if ($$dirty.series) { {
-    				overallPerc.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, 0));
+    				overallPerc.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, minOverallPerc));
     			} }
     	};
 
@@ -1447,8 +1489,10 @@
     		style,
     		rx,
     		ry,
+    		width,
     		height,
     		thickness,
+    		vbHeight,
     		valStore,
     		maskId,
     		grId,
@@ -1462,13 +1506,13 @@
     class LinearProgressBar extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$3, create_fragment$3, safe_not_equal, ["series", "style", "rx", "ry", "height", "thickness"]);
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, ["series", "style", "rx", "ry", "width", "height", "thickness"]);
     	}
     }
 
     /* src/index.svelte generated by Svelte v3.6.7 */
 
-    // (68:0) {:else}
+    // (75:0) {:else}
     function create_else_block$1(ctx) {
     	var current;
 
@@ -1476,6 +1520,7 @@
     		props: {
     		series: ctx.series,
     		style: ctx.style,
+    		width: ctx.width,
     		height: ctx.height,
     		thickness: ctx.thickness
     	}
@@ -1495,6 +1540,7 @@
     			var linearprogressbar_changes = {};
     			if (changed.series) linearprogressbar_changes.series = ctx.series;
     			if (changed.style) linearprogressbar_changes.style = ctx.style;
+    			if (changed.width) linearprogressbar_changes.width = ctx.width;
     			if (changed.height) linearprogressbar_changes.height = ctx.height;
     			if (changed.thickness) linearprogressbar_changes.thickness = ctx.thickness;
     			linearprogressbar.$set(linearprogressbar_changes);
@@ -1518,14 +1564,16 @@
     	};
     }
 
-    // (66:0) {#if style == 'radial'}
+    // (73:0) {#if style == 'radial'}
     function create_if_block$1(ctx) {
     	var current;
 
     	var radialprogressbar = new RadialProgressBar({
     		props: {
     		series: ctx.series,
-    		thickness: ctx.thickness
+    		thickness: ctx.thickness,
+    		width: ctx.width,
+    		height: ctx.height
     	}
     	});
 
@@ -1543,6 +1591,8 @@
     			var radialprogressbar_changes = {};
     			if (changed.series) radialprogressbar_changes.series = ctx.series;
     			if (changed.thickness) radialprogressbar_changes.thickness = ctx.thickness;
+    			if (changed.width) radialprogressbar_changes.width = ctx.width;
+    			if (changed.height) radialprogressbar_changes.height = ctx.height;
     			radialprogressbar.$set(radialprogressbar_changes);
     		},
 
@@ -1640,7 +1690,15 @@
     function instance$4($$self, $$props, $$invalidate) {
     	
 
-    	let { style = 'default', height = 16, thickness, colors = [
+    	let { style = 'default', width = null, thickness = null, height = null } = $$props;
+
+    	if(width == null)
+    		$$invalidate('width', width = style == 'radial' ? 75 : 150);
+
+    	if(height == null)
+    		$$invalidate('height', height = style == 'radial' ? width : 16 * width / 100);
+
+    	let { colors = [
     		'#FFC107',
     		'#4CAF50',
     		'#03A9F4'
@@ -1681,8 +1739,9 @@
 
     	$$self.$set = $$props => {
     		if ('style' in $$props) $$invalidate('style', style = $$props.style);
-    		if ('height' in $$props) $$invalidate('height', height = $$props.height);
+    		if ('width' in $$props) $$invalidate('width', width = $$props.width);
     		if ('thickness' in $$props) $$invalidate('thickness', thickness = $$props.thickness);
+    		if ('height' in $$props) $$invalidate('height', height = $$props.height);
     		if ('colors' in $$props) $$invalidate('colors', colors = $$props.colors);
     		if ('series' in $$props) $$invalidate('series', series = $$props.series);
     	};
@@ -1702,8 +1761,9 @@
 
     	return {
     		style,
-    		height,
+    		width,
     		thickness,
+    		height,
     		colors,
     		series,
     		updatePerc
@@ -1713,7 +1773,7 @@
     class Index extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$4, create_fragment$4, safe_not_equal, ["style", "height", "thickness", "colors", "series", "updatePerc"]);
+    		init(this, options, instance$4, create_fragment$4, safe_not_equal, ["style", "width", "thickness", "height", "colors", "series", "updatePerc"]);
     	}
 
     	get updatePerc() {
