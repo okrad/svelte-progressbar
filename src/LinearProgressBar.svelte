@@ -8,19 +8,21 @@
 	export let style = 'default';
 	export let rx = 2;
 	export let ry = 2;
+	export let width = 100;
 	export let height = 16;
 	export let thickness;
 
-	const valStore = getContext('valStore');
-
+	const minOverallPerc = 0.001;
 	const ts = new Date().getTime();
+	const vbHeight = 100 * (height / width);
+	const valStore = getContext('valStore');
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
 	const grId = 'pb_gradient_' + ts + Math.floor(Math.random() * 999);
 
 	let ypos = 0;
 	if(style == 'thin') {
 		if(!thickness)
-			thickness = 5;
+			thickness = 10;
 		rx = .2;
 		ry = .2;
 		ypos = 100 - thickness;
@@ -29,13 +31,14 @@
 		thickness = 100;
 	}
 
-	const overallPerc = tweened(0.1, {
+	//Start with a number slightly greater than 0 to avoid divisions by zero when computing stops
+	const overallPerc = tweened(minOverallPerc, {
 		duration: 1000,
 		easing: cubicOut
 	});
 
 	$: {
-		overallPerc.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, 0));
+		overallPerc.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, minOverallPerc));
 	}
 </script>
 
@@ -45,7 +48,7 @@
 	}
 
 	.progress-value {
-		font-size: 50%;
+		font-size: 70%;
 	}
 
 	.progress-value-inverted {
@@ -54,12 +57,11 @@
 
 </style>
 
-<svg class="progressbar" viewBox="0 0 100 {height}" xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar" viewBox="0 0 100 {vbHeight}" width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
 	<defs>
 		<linearGradient id="{grId}">
 			{#each series as serie}
 				<Stop prevOffset={serie.prevOffset} offset={serie.offset} color={serie.color} {overallPerc}/>
-				<!-- <Stop {...serie} {overallPerc}/> -->
 			{/each}
 		</linearGradient>
 		{#if style == 'default'}
@@ -72,7 +74,7 @@
 	<rect width="100" height="{thickness}%" {rx} {ry} y="{ypos}%" class="progress-bg"></rect>
 	<rect width="{$overallPerc}%" height="{thickness}%" {rx} {ry} y="{100 - thickness}%" fill="url(#{grId})"></rect>
 	{#if style == 'thin'}
-		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="{75 - thickness}%">{$valStore}</text>
+		<text class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="{65 - thickness}%">{$valStore}</text>
 	{:else}
 		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
 		<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%">{$valStore}</text>
