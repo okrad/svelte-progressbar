@@ -6,6 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Svelte progress bar examples</title>
 	<script src="scripts/index.js"></script>
+	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
@@ -104,7 +105,7 @@ new ProgressBar({
 		</div>
 		<div class="sample">
 			<h3>
-				A radial progress bar with 2 series
+				A radial progress bar with 2 series and custom font size-full
 			</h3>
 			<div class="demo">
 				<div id="demo5"></div>
@@ -114,7 +115,8 @@ new ProgressBar({
 	target: document.getElementById('demo5'),
 	props: {
 		style: 'radial',
-		series: [30, 15]
+		series: [30, 15],
+		textSize: 75
 	}
 });
 					</code></pre>
@@ -123,7 +125,7 @@ new ProgressBar({
 		</div>
 		<div class="sample">
 			<h3>
-				A radial progress bar with 1 series and bar thickness of 10
+				A radial progress bar with 1 series, bar thickness of 10 and custom color
 			</h3>
 			<div class="demo">
 				<div id="demo6"></div>
@@ -133,7 +135,11 @@ new ProgressBar({
 	target: document.getElementById('demo6'),
 	props: {
 		style: 'radial',
-		series: 30,
+		series: [
+		{
+			perc: 30,
+			color: '#2196f3'
+		},
 		thickness: 10
 	}
 });
@@ -179,7 +185,8 @@ new ProgressBar({
 			target: document.getElementById('demo5'),
 			props: {
 				style: 'radial',
-				series: [30, 15]
+				series: [30, 15],
+				textSize: 75
 			}
 		});
 
@@ -187,7 +194,10 @@ new ProgressBar({
 			target: document.getElementById('demo6'),
 			props: {
 				style: 'radial',
-				series: 30,
+				series: [{
+					perc: 30,
+					color: '#2196f3'
+				}],
 				thickness: 10
 			}
 		});
