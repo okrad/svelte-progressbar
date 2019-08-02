@@ -49,10 +49,22 @@ export default app;
 <script>
   import ProgressBar from "@okrad/svelte-progressbar";
 
-  export let series = 0;
+  export let series = [];
+
+  let bar;
+
+  const updateBar = values => {
+        values.forEach((v, i) => bar.updatePerc(v, i));
+  };
+
+  const resetBar = () => updateBar([0, 0]);
+
 </script>
 
-<ProgressBar {series} />
+<ProgressBar {series} bind:this={bar} />
+
+<button on:click={() => updateBar([100, 100])}>update</button>
+<button on:click={resetBar}>reset</button>
 ```
 
 ## Building from source
@@ -119,4 +131,5 @@ series: [
 
 # Changelog
 2019/08/02: Added *textSize* parameter
+
 2019/08/01: Handled svg viewport (width/height) while keeping proportions
