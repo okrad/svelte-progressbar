@@ -10,12 +10,16 @@
 	export let width = null;
 	export let thickness = null;
 	export let height = null;
+	export let textSize = null;
 
 	if(width == null)
 		width = style == 'radial' ? 75 : 150;
 
 	if(height == null)
-		height = style == 'radial' ? width : 16 * width / 100;
+		height = style == 'radial' ? width : 12 * width / 100;
+
+	if(textSize == null)
+		textSize = style == 'radial' ? 150 : style == 'thin' ? 60 : 70;
 
 	export let colors = [
 		'#FFC107',
@@ -71,7 +75,7 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar {series} {thickness} {width} {height} />
+	<RadialProgressBar {series} {thickness} {width} {height} {textSize} />
 {:else}
-	<LinearProgressBar {series} {style} {width} {height} {thickness} />
+	<LinearProgressBar {series} {style} {width} {height} {thickness} {textSize} />
 {/if}

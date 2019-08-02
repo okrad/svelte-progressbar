@@ -8,8 +8,7 @@
 	export let thickness = null;
 	export let width = 100;
 	export let height = 100;
-
-	let textSize;
+	export let textSize = 150;
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -31,7 +30,6 @@
 
 	$: {
 		maskSerie.prevOffset.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, 0));
-		textSize =  150 / series.length;
 	}
 
 
@@ -52,10 +50,6 @@
 	.progress-value-inverted {
 		fill: #fff;
 	}
-
-	/* .progress-value {
-		font-size: 150%;
-	} */
 
 </style>
 
