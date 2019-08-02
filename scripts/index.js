@@ -677,7 +677,7 @@
     	return child_ctx;
     }
 
-    // (71:1) {#each series as serie}
+    // (70:1) {#each series as serie}
     function create_each_block(ctx) {
     	var current;
 
@@ -917,9 +917,7 @@
 
     	
 
-    	let { series = [], thickness = null, width = 100, height = 100 } = $$props;
-
-    	let textSize;
+    	let { series = [], thickness = null, width = 100, height = 100, textSize = 150 } = $$props;
 
     	const ts = new Date().getTime();
     	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -942,12 +940,13 @@
     		if ('thickness' in $$props) $$invalidate('thickness', thickness = $$props.thickness);
     		if ('width' in $$props) $$invalidate('width', width = $$props.width);
     		if ('height' in $$props) $$invalidate('height', height = $$props.height);
+    		if ('textSize' in $$props) $$invalidate('textSize', textSize = $$props.textSize);
     	};
 
     	$$self.$$.update = ($$dirty = { series: 1 }) => {
     		if ($$dirty.series) { {
     				maskSerie.prevOffset.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, 0));
-    				$$invalidate('textSize', textSize =  150 / series.length);
+    				// textSize =  textSize / series.length;
     			} }
     	};
 
@@ -968,7 +967,7 @@
     class RadialProgressBar extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, ["series", "thickness", "width", "height"]);
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, ["series", "thickness", "width", "height", "textSize"]);
     	}
     }
 
@@ -1065,7 +1064,7 @@
     	return child_ctx;
     }
 
-    // (63:3) {#each series as serie}
+    // (61:3) {#each series as serie}
     function create_each_block$1(ctx) {
     	var current;
 
@@ -1115,24 +1114,24 @@
     	};
     }
 
-    // (67:2) {#if style == 'default'}
+    // (65:2) {#if style == 'default'}
     function create_if_block_1(ctx) {
-    	var mask, rect, rect_width_value, rect_x_value;
+    	var mask, rect, rect_width_value, rect_height_value, rect_x_value, rect_y_value, mask_height_value;
 
     	return {
     		c() {
     			mask = svg_element("mask");
     			rect = svg_element("rect");
     			attr(rect, "width", rect_width_value = "" + (100 - ctx.$overallPerc) + "%");
-    			attr(rect, "height", "100%");
+    			attr(rect, "height", rect_height_value = "" + ctx.thickness + "%");
     			attr(rect, "x", rect_x_value = "" + ctx.$overallPerc + "%");
-    			attr(rect, "y", "0");
+    			attr(rect, "y", rect_y_value = "" + (100 - ctx.thickness) + "%");
     			attr(rect, "fill", "#fff");
     			attr(mask, "id", ctx.maskId);
     			attr(mask, "x", "0");
     			attr(mask, "y", "0");
     			attr(mask, "width", "100");
-    			attr(mask, "height", "100%");
+    			attr(mask, "height", mask_height_value = "" + ctx.thickness + "%");
     		},
 
     		m(target, anchor) {
@@ -1145,8 +1144,20 @@
     				attr(rect, "width", rect_width_value);
     			}
 
+    			if ((changed.thickness) && rect_height_value !== (rect_height_value = "" + ctx.thickness + "%")) {
+    				attr(rect, "height", rect_height_value);
+    			}
+
     			if ((changed.$overallPerc) && rect_x_value !== (rect_x_value = "" + ctx.$overallPerc + "%")) {
     				attr(rect, "x", rect_x_value);
+    			}
+
+    			if ((changed.thickness) && rect_y_value !== (rect_y_value = "" + (100 - ctx.thickness) + "%")) {
+    				attr(rect, "y", rect_y_value);
+    			}
+
+    			if ((changed.thickness) && mask_height_value !== (mask_height_value = "" + ctx.thickness + "%")) {
+    				attr(mask, "height", mask_height_value);
     			}
     		},
 
@@ -1158,9 +1169,9 @@
     	};
     }
 
-    // (78:1) {:else}
+    // (80:1) {:else}
     function create_else_block(ctx) {
-    	var text0, t0, text1, t1, text1_mask_value;
+    	var text0, t0, text0_font_size_value, text1, t1, text1_mask_value, text1_font_size_value;
 
     	return {
     		c() {
@@ -1168,17 +1179,19 @@
     			t0 = text(ctx.$valStore);
     			text1 = svg_element("text");
     			t1 = text(ctx.$valStore);
-    			attr(text0, "class", "progress-value progress-value-inverted svelte-gfj393");
+    			attr(text0, "class", "progress-value progress-value-inverted svelte-cxfkwk");
     			attr(text0, "text-anchor", "middle");
     			attr(text0, "dominant-baseline", "central");
     			attr(text0, "x", "50%");
     			attr(text0, "y", "50%");
+    			attr(text0, "font-size", text0_font_size_value = "" + ctx.textSize + "%");
     			attr(text1, "mask", text1_mask_value = "url(#" + ctx.maskId + ")");
-    			attr(text1, "class", "progress-value svelte-gfj393");
+    			attr(text1, "class", "progress-value");
     			attr(text1, "text-anchor", "middle");
     			attr(text1, "dominant-baseline", "central");
     			attr(text1, "x", "50%");
     			attr(text1, "y", "50%");
+    			attr(text1, "font-size", text1_font_size_value = "" + ctx.textSize + "%");
     		},
 
     		m(target, anchor) {
@@ -1191,7 +1204,18 @@
     		p(changed, ctx) {
     			if (changed.$valStore) {
     				set_data(t0, ctx.$valStore);
+    			}
+
+    			if ((changed.textSize) && text0_font_size_value !== (text0_font_size_value = "" + ctx.textSize + "%")) {
+    				attr(text0, "font-size", text0_font_size_value);
+    			}
+
+    			if (changed.$valStore) {
     				set_data(t1, ctx.$valStore);
+    			}
+
+    			if ((changed.textSize) && text1_font_size_value !== (text1_font_size_value = "" + ctx.textSize + "%")) {
+    				attr(text1, "font-size", text1_font_size_value);
     			}
     		},
 
@@ -1204,19 +1228,20 @@
     	};
     }
 
-    // (76:1) {#if style == 'thin'}
+    // (78:1) {#if style == 'thin'}
     function create_if_block(ctx) {
-    	var text_1, t, text_1_y_value;
+    	var text_1, t, text_1_y_value, text_1_font_size_value;
 
     	return {
     		c() {
     			text_1 = svg_element("text");
     			t = text(ctx.$valStore);
-    			attr(text_1, "class", "progress-value svelte-gfj393");
+    			attr(text_1, "class", "progress-value");
     			attr(text_1, "text-anchor", "middle");
     			attr(text_1, "dominant-baseline", "central");
     			attr(text_1, "x", "50%");
-    			attr(text_1, "y", text_1_y_value = "" + (65 - ctx.thickness) + "%");
+    			attr(text_1, "y", text_1_y_value = "" + (100 - ctx.textSize/1.5 - ctx.thickness) + "%");
+    			attr(text_1, "font-size", text_1_font_size_value = "" + ctx.textSize + "%");
     		},
 
     		m(target, anchor) {
@@ -1229,8 +1254,12 @@
     				set_data(t, ctx.$valStore);
     			}
 
-    			if ((changed.thickness) && text_1_y_value !== (text_1_y_value = "" + (65 - ctx.thickness) + "%")) {
+    			if ((changed.textSize || changed.thickness) && text_1_y_value !== (text_1_y_value = "" + (100 - ctx.textSize/1.5 - ctx.thickness) + "%")) {
     				attr(text_1, "y", text_1_y_value);
+    			}
+
+    			if ((changed.textSize) && text_1_font_size_value !== (text_1_font_size_value = "" + ctx.textSize + "%")) {
+    				attr(text_1, "font-size", text_1_font_size_value);
     			}
     		},
 
@@ -1243,7 +1272,7 @@
     }
 
     function create_fragment$3(ctx) {
-    	var svg, defs, linearGradient, rect0, rect0_height_value, rect0_y_value, rect1, rect1_width_value, rect1_height_value, rect1_y_value, rect1_fill_value, svg_viewBox_value, current;
+    	var svg, defs, linearGradient, rect0, rect0_height_value, rect0_y_value, rect1, rect1_width_value, rect1_height_value, rect1_y_value, rect1_fill_value, svg_class_value, svg_viewBox_value, current;
 
     	var each_value = ctx.series;
 
@@ -1286,15 +1315,15 @@
     			attr(rect0, "height", rect0_height_value = "" + ctx.thickness + "%");
     			attr(rect0, "rx", ctx.rx);
     			attr(rect0, "ry", ctx.ry);
-    			attr(rect0, "y", rect0_y_value = "" + ctx.ypos + "%");
-    			attr(rect0, "class", "progress-bg svelte-gfj393");
+    			attr(rect0, "y", rect0_y_value = "" + (100 - ctx.thickness) + "%");
+    			attr(rect0, "class", "progress-bg svelte-cxfkwk");
     			attr(rect1, "width", rect1_width_value = "" + ctx.$overallPerc + "%");
     			attr(rect1, "height", rect1_height_value = "" + ctx.thickness + "%");
     			attr(rect1, "rx", ctx.rx);
     			attr(rect1, "ry", ctx.ry);
     			attr(rect1, "y", rect1_y_value = "" + (100 - ctx.thickness) + "%");
     			attr(rect1, "fill", rect1_fill_value = "url(#" + ctx.grId + ")");
-    			attr(svg, "class", "progressbar");
+    			attr(svg, "class", svg_class_value = "progressbar progressbar-" + ctx.style + " svelte-cxfkwk");
     			attr(svg, "viewBox", svg_viewBox_value = "0 0 100 " + ctx.vbHeight);
     			attr(svg, "width", ctx.width);
     			attr(svg, "height", ctx.height);
@@ -1365,7 +1394,7 @@
     				attr(rect0, "ry", ctx.ry);
     			}
 
-    			if ((!current || changed.ypos) && rect0_y_value !== (rect0_y_value = "" + ctx.ypos + "%")) {
+    			if ((!current || changed.thickness) && rect0_y_value !== (rect0_y_value = "" + (100 - ctx.thickness) + "%")) {
     				attr(rect0, "y", rect0_y_value);
     			}
 
@@ -1398,6 +1427,10 @@
     					if_block1.c();
     					if_block1.m(svg, null);
     				}
+    			}
+
+    			if ((!current || changed.style) && svg_class_value !== (svg_class_value = "progressbar progressbar-" + ctx.style + " svelte-cxfkwk")) {
+    				attr(svg, "class", svg_class_value);
     			}
 
     			if (!current || changed.width) {
@@ -1443,23 +1476,21 @@
 
     	
 
-    	let { series = [], style = 'default', rx = 2, ry = 2, width = 100, height = 16, thickness } = $$props;
+    	let { series = [], style = 'default', rx = 2, ry = 2, width = 100, height = 16, thickness, textSize } = $$props;
     	const ts = new Date().getTime();
     	const vbHeight = 100 * (height / width);
     	const valStore = getContext('valStore'); subscribe($$self, valStore, $$value => { $valStore = $$value; $$invalidate('$valStore', $valStore); });
     	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
     	const grId = 'pb_gradient_' + ts + Math.floor(Math.random() * 999);
-
-    	let ypos = 0;
     	if(style == 'thin') {
     		if(!thickness)
     			$$invalidate('thickness', thickness = 10);
     		$$invalidate('rx', rx = .2);
     		$$invalidate('ry', ry = .2);
-    		$$invalidate('ypos', ypos = 100 - thickness);
     	}
     	else {
-    		$$invalidate('thickness', thickness = 100);
+    		if(!thickness)
+    			$$invalidate('thickness', thickness = 100);
     	}
 
     	//Start with a number slightly greater than 0 to avoid divisions by zero when computing stops
@@ -1476,6 +1507,7 @@
     		if ('width' in $$props) $$invalidate('width', width = $$props.width);
     		if ('height' in $$props) $$invalidate('height', height = $$props.height);
     		if ('thickness' in $$props) $$invalidate('thickness', thickness = $$props.thickness);
+    		if ('textSize' in $$props) $$invalidate('textSize', textSize = $$props.textSize);
     	};
 
     	$$self.$$.update = ($$dirty = { series: 1 }) => {
@@ -1492,11 +1524,11 @@
     		width,
     		height,
     		thickness,
+    		textSize,
     		vbHeight,
     		valStore,
     		maskId,
     		grId,
-    		ypos,
     		overallPerc,
     		$overallPerc,
     		$valStore
@@ -1506,13 +1538,13 @@
     class LinearProgressBar extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$3, create_fragment$3, safe_not_equal, ["series", "style", "rx", "ry", "width", "height", "thickness"]);
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, ["series", "style", "rx", "ry", "width", "height", "thickness", "textSize"]);
     	}
     }
 
     /* src/index.svelte generated by Svelte v3.6.7 */
 
-    // (75:0) {:else}
+    // (79:0) {:else}
     function create_else_block$1(ctx) {
     	var current;
 
@@ -1522,7 +1554,8 @@
     		style: ctx.style,
     		width: ctx.width,
     		height: ctx.height,
-    		thickness: ctx.thickness
+    		thickness: ctx.thickness,
+    		textSize: ctx.textSize
     	}
     	});
 
@@ -1543,6 +1576,7 @@
     			if (changed.width) linearprogressbar_changes.width = ctx.width;
     			if (changed.height) linearprogressbar_changes.height = ctx.height;
     			if (changed.thickness) linearprogressbar_changes.thickness = ctx.thickness;
+    			if (changed.textSize) linearprogressbar_changes.textSize = ctx.textSize;
     			linearprogressbar.$set(linearprogressbar_changes);
     		},
 
@@ -1564,7 +1598,7 @@
     	};
     }
 
-    // (73:0) {#if style == 'radial'}
+    // (77:0) {#if style == 'radial'}
     function create_if_block$1(ctx) {
     	var current;
 
@@ -1573,7 +1607,8 @@
     		series: ctx.series,
     		thickness: ctx.thickness,
     		width: ctx.width,
-    		height: ctx.height
+    		height: ctx.height,
+    		textSize: ctx.textSize
     	}
     	});
 
@@ -1593,6 +1628,7 @@
     			if (changed.thickness) radialprogressbar_changes.thickness = ctx.thickness;
     			if (changed.width) radialprogressbar_changes.width = ctx.width;
     			if (changed.height) radialprogressbar_changes.height = ctx.height;
+    			if (changed.textSize) radialprogressbar_changes.textSize = ctx.textSize;
     			radialprogressbar.$set(radialprogressbar_changes);
     		},
 
@@ -1690,13 +1726,16 @@
     function instance$4($$self, $$props, $$invalidate) {
     	
 
-    	let { style = 'default', width = null, thickness = null, height = null } = $$props;
+    	let { style = 'default', width = null, thickness = null, height = null, textSize = null } = $$props;
 
     	if(width == null)
     		$$invalidate('width', width = style == 'radial' ? 75 : 150);
 
     	if(height == null)
-    		$$invalidate('height', height = style == 'radial' ? width : 16 * width / 100);
+    		$$invalidate('height', height = style == 'radial' ? width : 12 * width / 100);
+
+    	if(textSize == null)
+    		$$invalidate('textSize', textSize = style == 'radial' ? 150 : style == 'thin' ? 60 : 70);
 
     	let { colors = [
     		'#FFC107',
@@ -1742,6 +1781,7 @@
     		if ('width' in $$props) $$invalidate('width', width = $$props.width);
     		if ('thickness' in $$props) $$invalidate('thickness', thickness = $$props.thickness);
     		if ('height' in $$props) $$invalidate('height', height = $$props.height);
+    		if ('textSize' in $$props) $$invalidate('textSize', textSize = $$props.textSize);
     		if ('colors' in $$props) $$invalidate('colors', colors = $$props.colors);
     		if ('series' in $$props) $$invalidate('series', series = $$props.series);
     	};
@@ -1764,6 +1804,7 @@
     		width,
     		thickness,
     		height,
+    		textSize,
     		colors,
     		series,
     		updatePerc
@@ -1773,7 +1814,7 @@
     class Index extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance$4, create_fragment$4, safe_not_equal, ["style", "width", "thickness", "height", "colors", "series", "updatePerc"]);
+    		init(this, options, instance$4, create_fragment$4, safe_not_equal, ["style", "width", "thickness", "height", "textSize", "colors", "series", "updatePerc"]);
     	}
 
     	get updatePerc() {
