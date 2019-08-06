@@ -1,7 +1,7 @@
 {
   "name": "@okrad/svelte-progressbar",
-  "svelte": "src/index.svelte",
-  "module": "index.mjs",
+  "svelte": "src/ProgressBar.svelte",
+  "module": "index.js",
   "main": "index.js",
   "version": "1.2.0",
   "description": "A multi-series SVG progress bar component made with Svelte 3. It can be rendered both as a linear or radial progressbar.",
@@ -23,7 +23,10 @@
     "index.css"
   ],
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "rollup": "^1.12.0",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.0.3",
     "svelte": "^3.6.7"
