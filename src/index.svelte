@@ -7,19 +7,14 @@
 	import LinearProgressBar from './LinearProgressBar.svelte';
 
 	export let style = 'default'; // [thin, radial]
+	export let showProgressValue = true;
 	export let width = null;
 	export let thickness = null;
 	export let height = null;
 	export let textSize = null;
 
-	if(width == null)
-		width = style == 'radial' ? 75 : 150;
-
-	if(height == null)
-		height = style == 'radial' ? width : 12 * width / 100;
-
-	if(textSize == null)
-		textSize = style == 'radial' ? 150 : style == 'thin' ? 60 : 70;
+	if(width == 'auto')
+		width = '100%';
 
 	export let colors = [
 		'#FFC107',
@@ -75,7 +70,7 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar {series} {thickness} {width} {height} {textSize} />
+	<RadialProgressBar {series} {thickness} {width} {height} {textSize} {showProgressValue} />
 {:else}
-	<LinearProgressBar {series} {style} {width} {height} {thickness} {textSize} />
+	<LinearProgressBar {series} {style} {width} {height} {textSize} {showProgressValue} />
 {/if}
