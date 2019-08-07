@@ -5,17 +5,26 @@
 	import { getContext } from 'svelte';
 
 	export let series = [];
-	export let thickness = null;
-	export let width = 100;
-	export let height = 100;
-	export let textSize = 150;
+	export let thickness = 5;
+	export let width = null;
+	export let height = null;
+	export let textSize = null;
+	export let showProgressValue = true;
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
 	const valStore = getContext('valStore');
 
-	const vbWidth = 100;
-	const vbHeight = vbWidth * (height / width);
+	if(width == null)
+		//Default width when not specified
+		width = 75;
+
+	if(height == null)
+		//Default height when not specified
+		height = 100;
+
+	if(textSize == null)
+		textSize = 150;
 
 	const twOpts = {
 		duration: 1000,
@@ -53,18 +62,22 @@
 
 </style>
 
-<svg class="progressbar progressbar-radial" viewBox="0 0 {vbWidth} {vbHeight}" width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
-	<defs>
-		<mask id="{maskId}" x="0" y="0" width="100" height="100%">
-			<Arc {...maskSerie} {thickness} />
-			<circle cx="50" cy="50" r="{50 - thickness}" fill="#fff" />
-		</mask>
-	</defs>
+<svg class="progressbar progressbar-radial" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
+	{#if showProgressValue}
+		<defs>
+			<mask id="{maskId}" x="0" y="0" width="100" height="100%">
+				<Arc {...maskSerie} {thickness} />
+				<circle cx="50" cy="50" r="{50 - thickness}" fill="#fff" />
+			</mask>
+		</defs>
+	{/if}
 
 	<circle class="progress-bg" cx="50" cy="50" r="49"/>
 	{#each series as serie}
 		<Arc offset = {serie.offset} prevOffset = {serie.prevOffset} color = {serie.color}  {thickness} />
 	{/each}
-	<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
-	<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
+	{#if showProgressValue}
+		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
+		<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
+	{/if}
 </svg>
