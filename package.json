@@ -26,10 +26,12 @@
     "rollup": "^1.12.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^5.1.1",
     "svelte": "^3.6.7"
   },
   "scripts": {
     "build": "rollup -c",
-    "prepublishOnly": "npm run build"
+    "dist": "rollup -c --environment BUILD:production",
+    "prepublishOnly": "npm run dist"
   }
 }
