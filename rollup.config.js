@@ -1,6 +1,6 @@
 import svelte from 'rollup-plugin-svelte';
 import resolve from 'rollup-plugin-node-resolve';
-import buble from 'rollup-plugin-buble';
+import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 
@@ -22,7 +22,32 @@ export default {
 			}
 		}),
 		resolve(),
-		buble(),
+		babel({
+			// extensions: [ '.js', '.mjs', '.html', '.svelte' ],
+			extensions: [ '.js', '.mjs', '.html' ],
+			runtimeHelpers: true,
+			// exclude: [ 'node_modules/@babel/**', 'node_modules/core-js/**' ],
+			exclude: [ 'node_modules/@babel/**', 'node_modules/core-js/**' ],
+			presets: [
+				[
+					'@babel/preset-env',
+					{
+						targets: '> 0.25%, not dead',
+						useBuiltIns: 'usage',
+  						corejs: 3
+					}
+				]
+			],
+			plugins: [
+				'@babel/plugin-syntax-dynamic-import',
+				[
+					'@babel/plugin-transform-runtime',
+					{
+						useESModules: true
+					}
+				]
+			]
+		}),
 		production && terser()
 	]
 };
