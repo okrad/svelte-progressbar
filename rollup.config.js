@@ -1,8 +1,10 @@
 import svelte from 'rollup-plugin-svelte';
 import resolve from 'rollup-plugin-node-resolve';
 import pkg from './package.json';
+import { terser } from 'rollup-plugin-terser';
 
 const name = 'ProgressBar';
+const production = process.env.BUILD === 'production';
 
 export default {
 	input: 'src/index.svelte',
@@ -18,6 +20,7 @@ export default {
 				css.write('index.css');
 			}
 		}),
-		resolve()
+		resolve(),
+		production && terser()
 	],
 };

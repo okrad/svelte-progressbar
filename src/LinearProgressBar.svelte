@@ -34,15 +34,9 @@
 
 	let ypos = 0;
 	if(style == 'thin') {
-		if(!height)
-			height = 1;
 		rx = .2;
 		ry = .2;
 		ypos = 100 - height;
-	}
-	else {
-		if(!height)
-			height = 16;
 	}
 
 	//Start with a number slightly greater than 0 to avoid divisions by zero when computing stops
