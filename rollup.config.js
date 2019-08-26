@@ -3,10 +3,10 @@ import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
-import { terser } from 'rollup-plugin-terser';
 
 const name = 'ProgressBar';
 const production = process.env.BUILD === 'production';
+const legacy = !!process.env.LEGACY_BUILD;
 
 export default {
 	input: 'src/ProgressBar.svelte',
@@ -24,11 +24,9 @@ export default {
 			}
 		}),
 		resolve(),
-		babel({
-			// extensions: [ '.js', '.mjs', '.html', '.svelte' ],
-			extensions: [ '.js', '.mjs', '.html' ],
+		legacy && babel({
+			extensions: [ '.js', '.mjs', '.html', '.svelte' ],
 			runtimeHelpers: true,
-			// exclude: [ 'node_modules/@babel/**', 'node_modules/core-js/**' ],
 			exclude: [ 'node_modules/@babel/**', 'node_modules/core-js/**' ],
 			presets: [
 				[

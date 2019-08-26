@@ -27,6 +27,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
     "rollup": "^1.12.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -37,6 +38,10 @@
   "scripts": {
     "build": "rollup -c",
     "dist": "rollup -c --environment BUILD:production",
+    "dist:legacy": "rollup -c --environment BUILD:production,LEGACY_BUILD",
     "prepublishOnly": "npm run dist"
+  },
+  "dependencies": {
+    "core-js": "^3.2.1"
   }
 }
