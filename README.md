@@ -6,6 +6,8 @@ If rendered as a linear progressbar there are 2 styles supported:
 * Standard: uses svg masks to display inverted text color for the value.
 * Thin: the progression bars are rendered as thin bars and the values are placed externally
 
+No dependencies, only 20kb when minified (6.5kb gzipped)!
+
 # Usage
 
 ## From npm
@@ -72,9 +74,18 @@ export default app;
 ```
 npm run build
 ```
-Creates index.js and index.css files.
 
-Include them in your html file, then instantiate the component:
+Creates unminified index.js and index.css files.
+
+Or...
+
+```
+npm run dist
+```
+
+Creates minified index.js and index.css files.
+
+Either way, include index.js/index.css in your html file, then instantiate the component:
 ```
 const pb = new ProgressBar({
         target: document.getElementById('demo'),
@@ -123,13 +134,17 @@ series: [
 
 * style: can be "standard" (default), "thin" or "radial"
 * width: determines the width of the whole component
-* height: determines the height of the whole component. If not specified, it defaults to the 12% of the width for thin and standard progressbar, and to the 100% of the width for radial ones.
-* thickness: for thin progress bars, specifies the thickness of the bar as a percentage of the total height of the component. For radial progress bars, determines the thickness of the bar as a unitless number between 0 and 50 (corresponding to the ray of the circle).
-* textSize: the size of the font (in percentage) for the progression value (default: 70 for thin and default progressbar, 150 for radial)
+* height: determines the height of the svg viewbox. If not specified, it defaults to the 14% of the viewbox width for standard progressbars, 1% of the viewbox width for thin progressbars, and to the 100% of the viewbox width for radial ones.
+* thickness: used only for radial progress bars. It determines the thickness of the bar as a unitless number between 0 and 50 (corresponding to the ray of the circle).
+* textSize: the size of the font (in percentage) for the progression value (default: 30 for thin progressbars, 70 for default progressbar, 150 for radial)
 
 **updatePerc(perc, seriesId = 0)**: update the specified series progress percentage
 
 # Changelog
+2019/08/07: Added *dist* task
+
+2019/08/06: Refactored thin progressbars
+
 2019/08/02: Added *textSize* parameter
 
 2019/08/01: Handled svg viewport (width/height) while keeping proportions

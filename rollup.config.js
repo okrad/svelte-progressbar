@@ -3,7 +3,9 @@ import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
+import { terser } from 'rollup-plugin-terser';
 
+const name = 'ProgressBar';
 const production = process.env.BUILD === 'production';
 
 export default {

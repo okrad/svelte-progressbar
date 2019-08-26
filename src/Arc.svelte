@@ -3,6 +3,7 @@
 	export let prevOffset;
 	export let color;
 	export let thickness;
+	export let cls;
 
 	if(!thickness)
 		thickness = 2;
@@ -21,7 +22,12 @@
 	function describeArc(x, y, radius, startPerc, endPerc){
 
 		const startAngle = startPerc / 100 * 360;
-		const endAngle = endPerc / 100 * 360;
+		let endAngle = endPerc / 100 * 360;
+
+		//Avoid overlapping of start and end positions...
+		if(endAngle == 360)
+			endAngle = 359.9999;
+
 		const start = polarToCartesian(x, y, radius, endAngle);
 		const end = polarToCartesian(x, y, radius, startAngle);
 
@@ -34,4 +40,4 @@
 
 	}
 </script>
-<path d="{describeArc(50, 50, 49.5 - thickness / 2, $prevOffset, $offset)}" fill="transparent" stroke="{color}" stroke-width="{thickness}"/>
+<path d="{describeArc(50, 50, 49.5 - thickness / 2, $prevOffset, $offset)}" fill="transparent" stroke="{color}" stroke-width="{thickness}" class="pb-arc {cls}"/>
