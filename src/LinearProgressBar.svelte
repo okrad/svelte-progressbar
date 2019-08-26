@@ -70,7 +70,7 @@
 	<defs>
 		<linearGradient id="{grId}">
 			{#each series as serie}
-				<Stop prevOffset={serie.prevOffset} offset={serie.offset} color={serie.color} {overallPerc}/>
+				<Stop prevOffset={serie.prevOffset} offset={serie.offset} color={serie.color} cls="{serie.cls}" {overallPerc}/>
 			{/each}
 		</linearGradient>
 		{#if style == 'default' && showProgressValue}

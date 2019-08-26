@@ -74,7 +74,7 @@
 
 	<circle class="progress-bg" cx="50" cy="50" r="49"/>
 	{#each series as serie}
-		<Arc offset = {serie.offset} prevOffset = {serie.prevOffset} color = {serie.color}  {thickness} />
+		<Arc offset={serie.offset} prevOffset={serie.prevOffset} color={serie.color} cls={serie.cls} {thickness} />
 	{/each}
 	{#if showProgressValue}
 		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>

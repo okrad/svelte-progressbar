@@ -16,11 +16,22 @@
 	if(width == 'auto')
 		width = '100%';
 
-	export let colors = [
-		'#FFC107',
-		'#4CAF50',
-		'#03A9F4'
-	];
+	export let colors = [];
+
+	//Array of the classes that must be applied to the stops whenever the progress percent exceeds the threshold
+	export let classByThresholds = [];
+
+	if(classByThresholds.length > 0) {
+		//Sort thresholds to ensure proper comparison
+		classByThresholds.sort((t1, t2) => t1.threshold - t2.threshold);
+	}
+	else if(colors.length == 0) {
+		colors = [
+			'#FFC107',
+			'#4CAF50',
+			'#03A9F4'
+		];
+	}
 
 	export let series = [];
 
@@ -39,7 +50,7 @@
 		s.offset = tweened(0, twOpts);
 		s.prevOffset = tweened(0, twOpts);
 
-		if(!s.color)
+		if(!s.color && colors)
 			s.color = colors[idx % colors.length];
 
 		return s;
@@ -59,6 +70,9 @@
 			s.prevOffset.set(cumOffset);
 			cumOffset += s.perc;
 			s.offset.set(cumOffset);
+			const appliedThreshold = classByThresholds.find((thresInfo, idx) => (s.perc <= thresInfo.threshold || idx == classByThresholds.length - 1));
+
+			s.cls = appliedThreshold ? appliedThreshold.cls : null;
 		});
 	}
 
