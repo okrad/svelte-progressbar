@@ -3,6 +3,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { setContext } from 'svelte';
 	import { derived } from 'svelte/store';
+	import { readable } from 'svelte/store';
 	import RadialProgressBar from './RadialProgressBar.svelte';
 	import LinearProgressBar from './LinearProgressBar.svelte';
 
@@ -12,6 +13,7 @@
 	export let thickness = null;
 	export let height = null;
 	export let textSize = null;
+	export let forceContent = null;
 
 	if(width == 'auto')
 		width = '100%';
@@ -57,10 +59,16 @@
 	});
 
 	const valueStore = tweened(Array(series.length).fill(0), twOpts);
-	const valStore = derived(
-		valueStore,
-		$valueStore => $valueStore.map(s => Math.round(s) + '%').join(' + ')
-	);
+	let valStore;
+	if(!forceContent) {
+		valStore = derived(
+			valueStore,
+			$valueStore => $valueStore.map(s => Math.round(s) + '%').join(' + ')
+		);
+	}
+	else {
+		valStore = readable(forceContent);
+	}
 
 	$: {
 		valueStore.set(series.map(s => s.perc));
