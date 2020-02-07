@@ -41,11 +41,12 @@
 		color: '#fff'
 	};
 
-	if(!stackSeries) {
-		series.forEach((s, idx) => {
+	series.forEach((s, idx) => {
+		if(!stackSeries)
 			s.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
-		});
-	}
+		else
+			s.radius = 50 - thickness/2;
+	});
 
 	$: {
 		maskSerie.prevOffset.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, 0));
