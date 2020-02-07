@@ -14,6 +14,10 @@
 	export let height = null;
 	export let textSize = null;
 	export let forceContent = null;
+	export let stackSeries = true;
+	export let margin = 0;
+	export let addBackground = true;
+	export let bgColor = '#e5e5e5';
 
 	if(width == 'auto')
 		width = '100%';
@@ -75,9 +79,17 @@
 
 		let cumOffset = 0;
 		series.forEach((s, idx) => {
-			s.prevOffset.set(cumOffset);
-			cumOffset += s.perc;
-			s.offset.set(cumOffset);
+
+			if(stackSeries) {
+				s.prevOffset.set(cumOffset);
+				cumOffset += s.perc;
+				s.offset.set(cumOffset);
+			}
+			else {
+				s.prevOffset.set(0);
+				s.offset.set(s.perc);
+			}
+
 			const appliedThreshold = classByThresholds.find((thresInfo, idx) => (s.perc <= thresInfo.threshold || idx == classByThresholds.length - 1));
 
 			s.cls = appliedThreshold ? appliedThreshold.cls : null;
@@ -92,7 +104,7 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar {series} {thickness} {width} {height} {textSize} {showProgressValue} />
+	<RadialProgressBar {series} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
 {:else}
-	<LinearProgressBar {series} {style} {width} {height} {textSize} {showProgressValue} />
+	<LinearProgressBar {series} {style} {addBackground} {bgColor} {width} {height} {textSize} {showProgressValue} />
 {/if}

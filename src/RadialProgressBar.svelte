@@ -10,6 +10,10 @@
 	export let height = null;
 	export let textSize = null;
 	export let showProgressValue = true;
+	export let stackSeries = true;
+	export let margin = 0;
+	export let addBackground = true;
+	export let bgColor = '#e5e5e5';
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -37,11 +41,15 @@
 		color: '#fff'
 	};
 
+	if(!stackSeries) {
+		series.forEach((s, idx) => {
+			s.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
+		});
+	}
+
 	$: {
 		maskSerie.prevOffset.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, 0));
 	}
-
-
 </script>
 
 <style>
@@ -72,9 +80,11 @@
 		</defs>
 	{/if}
 
-	<circle class="progress-bg" cx="50" cy="50" r="49"/>
 	{#each series as serie}
-		<Arc offset={serie.offset} prevOffset={serie.prevOffset} color={serie.color} cls={serie.cls} {thickness} />
+		{#if addBackground}
+			<circle cx="50" cy="50" r="{serie.radius}" fill="transparent" stroke-width="{thickness}" stroke="{bgColor}"/>
+		{/if}
+		<Arc radius={serie.radius} offset={serie.offset} prevOffset={serie.prevOffset} color={serie.color} cls={serie.cls} {thickness} />
 	{/each}
 	{#if showProgressValue}
 		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>

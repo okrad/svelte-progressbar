@@ -4,6 +4,8 @@
 	export let color;
 	export let thickness;
 	export let cls;
+	export let radius = 49.5;
+	export let bg = false;
 
 	if(!thickness)
 		thickness = 2;
@@ -20,6 +22,9 @@
 	}
 
 	function describeArc(x, y, radius, startPerc, endPerc){
+
+		if(endPerc > 100)
+			endPerc = 100;
 
 		const startAngle = startPerc / 100 * 360;
 		let endAngle = endPerc / 100 * 360;
@@ -40,4 +45,8 @@
 
 	}
 </script>
-<path d="{describeArc(50, 50, 49.5 - thickness / 2, $prevOffset, $offset)}" fill="transparent" stroke="{color}" stroke-width="{thickness}" class="pb-arc {cls}"/>
+{#if !bg}
+	<path d="{describeArc(50, 50, radius, $prevOffset, $offset)}" fill="transparent" stroke="{color}" stroke-width="{thickness}" class="pb-arc {cls}"/>
+{:else}
+	<path d="{describeArc(50, 50, radius, 0, 100)}" fill="transparent" stroke="{color}" stroke-width="{thickness}" class="pb-arc {cls}"/>
+{/if}

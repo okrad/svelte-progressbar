@@ -12,6 +12,8 @@
 	export let height = null;
 	export let textSize = null;
 	export let showProgressValue = true;
+	export let addBackground = true;
+	export let bgColor = null;
 
 	const minOverallPerc = 0.001;
 	const ts = new Date().getTime();
@@ -48,6 +50,17 @@
 	$: {
 		overallPerc.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, minOverallPerc));
 	}
+
+	let dominantBaseline = '';
+	let dy = '0';
+ 	if(window.navigator.userAgent.indexOf('Trident') > -1 || window.navigator.userAgent.indexOf('Edge') > -1) {
+		//Ugly workaround needed only in legacy mode to adjust the vertical positioning of the value
+		//in IE/Edge (that don't support dominant-baseline)...
+		dy = '-.4em';
+	}
+	else {
+		dominantBaseline = 'central';
+	}
 </script>
 
 <style>
@@ -81,17 +94,21 @@
 	</defs>
 
 	{#if style == 'thin'}
-		<rect width="100" height="100%" x="0" y="0" class="progress-bg"></rect>
+		{#if addBackground}
+			<rect width="100" height="100%" x="0" y="0" fill={bgColor} class="progress-bg"></rect>
+		{/if}
 		<rect width="{$overallPerc}%" height="100%" x="0" y="0" fill="url(#{grId})"></rect>
 		{#if showProgressValue}
 			<text class="progress-value" text-anchor="middle" x="50%" y="-100%" font-size="{textSize}%">{$valStore}</text>
 		{/if}
 	{:else}
-		<rect width="100" height="100%" {rx} {ry} y="0" class="progress-bg"></rect>
+		{#if addBackground}
+			<rect width="100" height="100%" {rx} {ry} y="0" fill={bgColor} class="progress-bg"></rect>
+		{/if}
 		<rect width="{$overallPerc}%" height="100%" {rx} {ry} y="0" fill="url(#{grId})"></rect>
 		{#if showProgressValue}
-			<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
-			<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
+			<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
+			<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
 		{/if}
 	{/if}
 </svg>
