@@ -137,10 +137,17 @@ series: [
 * height: determines the height of the svg viewbox. If not specified, it defaults to the 14% of the viewbox width for standard progressbars, 1% of the viewbox width for thin progressbars, and to the 100% of the viewbox width for radial ones.
 * thickness: used only for radial progress bars. It determines the thickness of the bar as a unitless number between 0 and 50 (corresponding to the ray of the circle).
 * textSize: the size of the font (in percentage) for the progression value (default: 30 for thin progressbars, 70 for default progressbar, 150 for radial)
+* addBackground: determines if a further bar should be added as background to the value bar. Default true.
+* bgColor: if addBackground is true, specifies the color of the background bar
+* stackSeries: currently available for "radial" style only. If true (default), series will be stacked one after the other. If false, series will be rendered as independent, concentrical arcs.
+* margin: currently used only for radial non-stacked bar. Determines the space between the series bars.
 
 **updatePerc(perc, seriesId = 0)**: update the specified series progress percentage
 
 # Changelog
+2020/02/07: Version 1.3.1. Added "addBackground", "bgColor", "stackSeries", "margin" parameters.
+Introduced "legacy" mode for compatibility with IE/Edge.
+
 2019/08/07: Added *dist* task
 
 2019/08/06: Refactored thin progressbars
