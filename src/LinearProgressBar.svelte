@@ -14,10 +14,11 @@
 	export let showProgressValue = true;
 	export let addBackground = true;
 	export let bgColor = null;
+	export let valStore;
 
 	const minOverallPerc = 0.001;
 	const ts = new Date().getTime();
-	const valStore = getContext('valStore');
+
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
 	const grId = 'pb_gradient_' + ts + Math.floor(Math.random() * 999);
 
@@ -64,7 +65,6 @@
 </script>
 
 <style>
-
 	.progressbar-thin {
 		overflow: visible;
 	}
@@ -76,14 +76,13 @@
 	.progress-value-inverted {
 		fill: #fff;
 	}
-
 </style>
 
 <svg class="progressbar progressbar-{style}" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
 	<defs>
 		<linearGradient id="{grId}">
 			{#each series as serie}
-				<Stop prevOffset={serie.prevOffset} offset={serie.offset} color={serie.color} cls="{serie.cls}" {overallPerc}/>
+				<Stop {serie} {overallPerc}/>
 			{/each}
 		</linearGradient>
 		{#if style == 'default' && showProgressValue}

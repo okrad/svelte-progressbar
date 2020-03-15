@@ -1,16 +1,14 @@
 <script>
-	export let offset;
-	export let prevOffset;
-	export let color;
+	export let serie;
 	export let thickness;
-	export let cls;
-	export let radius = 49.5;
 	export let bg = false;
+
+	const store = serie.store;
 
 	if(!thickness)
 		thickness = 2;
 
-	//Based om https://stackoverflow.com/q/5736398
+	//Based on https://stackoverflow.com/q/5736398
 	function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
 		angleInDegrees = angleInDegrees % 360;
 		const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
@@ -44,9 +42,10 @@
 		].join(" ");
 
 	}
+
 </script>
 {#if !bg}
-	<path d="{describeArc(50, 50, radius, $prevOffset, $offset)}" fill="transparent" stroke="{color}" stroke-width="{thickness}" class="pb-arc {cls}"/>
+	<path d="{describeArc(50, 50, serie.radius, $store.prevOffset, $store.offset)}" fill="transparent" stroke="{serie.color}" stroke-width="{thickness}" class="pb-arc {serie.cls}"/>
 {:else}
-	<path d="{describeArc(50, 50, radius, 0, 100)}" fill="transparent" stroke="{color}" stroke-width="{thickness}" class="pb-arc {cls}"/>
+	<path d="{describeArc(50, 50, serie.radius, 0, 100)}" fill="transparent" stroke="{serie.color}" stroke-width="{thickness}" class="pb-arc {serie.cls}"/>
 {/if}

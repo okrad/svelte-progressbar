@@ -1,10 +1,9 @@
 <script>
-	export let prevOffset;
-	export let offset;
+	export let serie;
 	export let overallPerc;
-	export let color;
-	export let cls;
+
+	const store = serie.store;
 </script>
 
-<stop offset="{Math.round($prevOffset * 100 / $overallPerc)}%" stop-color="{color}" class="{cls}"/>
-<stop offset="{Math.round($offset * 100 / $overallPerc)}%" stop-color="{color}" class="{cls}" />
+<stop offset="{Math.round($store.prevOffset * 100 / $overallPerc)}%" stop-color="{serie.color}" class="{serie.cls}"/>
+<stop offset="{Math.round($store.offset * 100 / $overallPerc)}%" stop-color="{serie.color}" class="{serie.cls}" />

@@ -33,6 +33,7 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-svelte": "^5.1.1",
     "rollup-plugin-terser": "^5.2.0",
     "svelte": "^3.18.1"
@@ -41,7 +42,8 @@
     "build": "rollup -c",
     "dist": "rollup -c --environment BUILD:production",
     "dist:all": "rollup -c --environment BUILD:production && rollup -c --environment BUILD:production,LEGACY_BUILD",
-    "prepublishOnly": "npm run dist:all"
+    "prepublishOnly": "npm run dist:all",
+    "dev": "rollup -c -w --environment BUILD:dev"
   },
   "dependencies": {
     "core-js": "^3.6.4"

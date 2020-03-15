@@ -1,9 +1,5 @@
 <script>
-	import { tweened } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
-	import { setContext } from 'svelte';
-	import { derived } from 'svelte/store';
-	import { readable } from 'svelte/store';
+	import { serieStore, valueStore } from './stores.js';
 	import RadialProgressBar from './RadialProgressBar.svelte';
 	import LinearProgressBar from './LinearProgressBar.svelte';
 
@@ -41,11 +37,6 @@
 
 	export let series = [];
 
-	const twOpts = {
-		duration: 1000,
-		easing: cubicOut
-	};
-
 	if(!Array.isArray(series))
 		series = [series];
 
@@ -53,50 +44,36 @@
 		if(typeof s != 'object')
 			s = {perc: s};
 
-		s.offset = tweened(0, twOpts);
-		s.prevOffset = tweened(0, twOpts);
-
 		if(!s.color && colors)
 			s.color = colors[idx % colors.length];
+
+		s.store = serieStore();
 
 		return s;
 	});
 
-	const valueStore = tweened(Array(series.length).fill(0), twOpts);
-	let valStore;
-	if(!forceContent) {
-		valStore = derived(
-			valueStore,
-			$valueStore => $valueStore.map(s => Math.round(s) + '%').join(' + ')
-		);
-	}
-	else {
-		valStore = readable(forceContent);
-	}
+	const valStore = valueStore(Array(series.length).fill(0), forceContent);
 
 	$: {
-		valueStore.set(series.map(s => s.perc));
+		$valStore = series.map(s => s.perc);
 
-		let cumOffset = 0;
+		let startOffset = 0;
+
 		series.forEach((s, idx) => {
 
-			if(stackSeries) {
-				s.prevOffset.set(cumOffset);
-				cumOffset += s.perc;
-				s.offset.set(cumOffset);
-			}
-			else {
-				s.prevOffset.set(0);
-				s.offset.set(s.perc);
-			}
+			s.store.set({
+				prevOffset: startOffset,
+				offset: startOffset + s.perc
+			});
 
 			const appliedThreshold = classByThresholds.find((thresInfo, idx) => (s.perc <= thresInfo.threshold || idx == classByThresholds.length - 1));
 
 			s.cls = appliedThreshold ? appliedThreshold.cls : null;
+
+			if(stackSeries)
+				startOffset += s.perc;
 		});
 	}
-
-	setContext('valStore', valStore);
 
 	export function updatePerc(perc, seriesIdx = 0) {
 		series[seriesIdx].perc = perc;
@@ -104,7 +81,7 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar {series} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
+	<RadialProgressBar {valStore} {series} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
 {:else}
-	<LinearProgressBar {series} {style} {addBackground} {bgColor} {width} {height} {textSize} {showProgressValue} />
+	<LinearProgressBar {valStore} {series} {style} {addBackground} {bgColor} {width} {height} {textSize} {showProgressValue} />
 {/if}
