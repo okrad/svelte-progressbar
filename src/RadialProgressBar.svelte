@@ -29,24 +29,21 @@
 		textSize = 150;
 
 	const maskSerie = {
-		store: serieStore(),
-		radius: 50 - thickness/2,
+		radius: 50 - thickness / 2,
 		color: '#fff'
 	};
 
+	maskSerie.store = serieStore(maskSerie);
 
 	series.forEach((s, idx) => {
 		if(!stackSeries)
 			s.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
 		else
-			s.radius = 50 - thickness/2;
+			s.radius = 50 - thickness / 2;
 	});
 
 	$: {
-		maskSerie.store.set({
-			prevOffset: 0,
-			offset: series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0)
-		});
+		maskSerie.store.setPerc(series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0), 0);
 	}
 </script>
 

@@ -45,7 +45,7 @@
 
 </script>
 {#if !bg}
-	<path d="{describeArc(50, 50, serie.radius, $store.prevOffset, $store.offset)}" fill="transparent" stroke="{serie.color}" stroke-width="{thickness}" class="pb-arc {serie.cls}"/>
+	<path d="{describeArc(50, 50, serie.radius, $store.prevOffset, $store.offset)}" fill="transparent" stroke="{$store.color}" stroke-width="{thickness}" class="pb-arc {serie.cls}"/>
 {:else}
-	<path d="{describeArc(50, 50, serie.radius, 0, 100)}" fill="transparent" stroke="{serie.color}" stroke-width="{thickness}" class="pb-arc {serie.cls}"/>
+	<path d="{describeArc(50, 50, serie.radius, 0, 100)}" fill="transparent" stroke="{$store.color}" stroke-width="{thickness}" class="pb-arc {serie.cls}"/>
 {/if}

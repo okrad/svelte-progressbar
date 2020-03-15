@@ -46,6 +46,7 @@
     "dev": "rollup -c -w --environment BUILD:dev"
   },
   "dependencies": {
-    "core-js": "^3.6.4"
+    "core-js": "^3.6.4",
+    "d3-interpolate": "^1.4.0"
   }
 }

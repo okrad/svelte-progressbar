@@ -44,10 +44,16 @@
 		if(typeof s != 'object')
 			s = {perc: s};
 
-		if(!s.color && colors)
-			s.color = colors[idx % colors.length];
+		if(!s.color) {
+ 			if(s.colors) {
+				s.color = s.colors[0].color;
+			}
+			else if(colors) {
+				s.color = colors[idx % colors.length];
+			}
+		}
 
-		s.store = serieStore();
+		s.store = serieStore(s);
 
 		return s;
 	});
@@ -61,10 +67,7 @@
 
 		series.forEach((s, idx) => {
 
-			s.store.set({
-				prevOffset: startOffset,
-				offset: startOffset + s.perc
-			});
+			s.store.setPerc(s.perc, startOffset);
 
 			const appliedThreshold = classByThresholds.find((thresInfo, idx) => (s.perc <= thresInfo.threshold || idx == classByThresholds.length - 1));
 
