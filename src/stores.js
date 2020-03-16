@@ -1,14 +1,13 @@
 import { tweened } from 'svelte/motion';
 import { cubicOut } from 'svelte/easing';
 import { derived, readable } from 'svelte/store';
-import { interpolateLab } from 'd3-interpolate';
 
 const twOpts = {
 	duration: 1000,
 	easing: cubicOut
 };
 
-export function serieStore(serie) {
+export function serieStore(serie, thresholds) {
 
 	const s = tweened({
 		offset: 0,
@@ -20,7 +19,7 @@ export function serieStore(serie) {
 			const val = {
 				offset: (targetVal.offset - startVal.offset) * t,
 				prevOffset: (targetVal.prevOffset - startVal.prevOffset) * t,
-				color: interpolateLab(startVal.color, targetVal.color)(t)
+				color: targetVal.color
 			};
 
 			return val;
@@ -31,8 +30,8 @@ export function serieStore(serie) {
 
 		let color = serie.color;
 
-		if(serie.colors) {
-			const thres = serie.colors.find((colInfo, idx) => (perc <= colInfo.till || idx == serie.colors.length - 1));
+		if(thresholds && thresholds.length >0 ) {
+			const thres = thresholds.find((colInfo, idx) => (perc <= colInfo.till || idx == thresholds.length - 1));
 
 			if(thres)
 				color = thres.color;

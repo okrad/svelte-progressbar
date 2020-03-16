@@ -18,16 +18,16 @@
 	if(width == 'auto')
 		width = '100%';
 
-	export let colors = [];
+	//Array of classes / colors that must be applied to the stops whenever the progress percent exceeds the threshold
+	export let thresholds = [];
 
-	//Array of the classes that must be applied to the stops whenever the progress percent exceeds the threshold
-	export let classByThresholds = [];
-
-	if(classByThresholds.length > 0) {
+	if(thresholds.length > 0) {
 		//Sort thresholds to ensure proper comparison
-		classByThresholds.sort((t1, t2) => t1.threshold - t2.threshold);
+		thresholds.sort((t1, t2) => t1.threshold - t2.threshold);
 	}
-	else if(colors.length == 0) {
+
+	export let colors = [];
+	if(colors.length == 0) {
 		colors = [
 			'#FFC107',
 			'#4CAF50',
@@ -45,15 +45,15 @@
 			s = {perc: s};
 
 		if(!s.color) {
- 			if(s.colors) {
-				s.color = s.colors[0].color;
+ 			if(thresholds.length > 0 && thresholds[0].color) {
+				s.color = thresholds[0].color;
 			}
 			else if(colors) {
 				s.color = colors[idx % colors.length];
 			}
 		}
 
-		s.store = serieStore(s);
+		s.store = serieStore(s, thresholds);
 
 		return s;
 	});
@@ -68,10 +68,6 @@
 		series.forEach((s, idx) => {
 
 			s.store.setPerc(s.perc, startOffset);
-
-			const appliedThreshold = classByThresholds.find((thresInfo, idx) => (s.perc <= thresInfo.threshold || idx == classByThresholds.length - 1));
-
-			s.cls = appliedThreshold ? appliedThreshold.cls : null;
 
 			if(stackSeries)
 				startOffset += s.perc;

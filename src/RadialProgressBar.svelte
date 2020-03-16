@@ -33,7 +33,7 @@
 		color: '#fff'
 	};
 
-	maskSerie.store = serieStore(maskSerie);
+	maskSerie.store = serieStore(maskSerie, []);
 
 	series.forEach((s, idx) => {
 		if(!stackSeries)
