@@ -148,7 +148,7 @@ new ProgressBar({
 		</div>
 
 		<div class="sample">
-			<h3>A radial non-stacked progress bar with 2 series</h3>
+			<h3>A radial progress bar with 1 series and color thresholds</h3>
 
 			<div class="demo">
 				<div id="demo7"></div>
@@ -156,6 +156,38 @@ new ProgressBar({
 					<pre><code>
 new ProgressBar({
 	target: document.getElementById('demo7'),
+	props: {
+		style: 'radial',
+		series: [{
+			perc: 80,
+		}],
+		thickness: 10,
+		thresholds: [
+			{
+				till: 50,
+				color: '#800000'
+			},
+			{
+				till: 100,
+				color: '#008000'
+			},
+		]
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
+
+		<div class="sample">
+			<h3>A radial non-stacked progress bar with 2 series</h3>
+
+			<div class="demo">
+				<div id="demo8"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo8'),
 	props: {
 		style: 'radial',
 		series: [30, 70],
@@ -226,6 +258,27 @@ new ProgressBar({
 
 		new ProgressBar({
 			target: document.getElementById('demo7'),
+			props: {
+				style: 'radial',
+				series: [{
+					perc: 100,
+				}],
+				thickness: 10,
+				thresholds: [
+					{
+						till: 50,
+						color: '#0f0'
+					},
+					{
+						till: 100,
+						color: '#f00'
+					},
+				]
+			}
+		});
+
+		new ProgressBar({
+			target: document.getElementById('demo8'),
 			props: {
 				style: 'radial',
 				series: [30, 70],
