@@ -18,7 +18,7 @@ npm i @okrad/svelte-progressbar
 
 ### Using in a standard npm module
 
-```
+```javascript
 import ProgressBar from '@okrad/svelte-progressbar';
 
 const pb = new ProgressBar({
@@ -32,7 +32,7 @@ const pb = new ProgressBar({
 
 ### Using in a Svelte app
 
-```
+```javascript
 //main.js
 import App from './App.svelte';
 
@@ -46,7 +46,7 @@ const app = new App({
 export default app;
 ```
 
-```
+```javascript
 //App.svelte
 <script>
   import ProgressBar from "@okrad/svelte-progressbar";
@@ -86,7 +86,7 @@ npm run dist
 Creates minified index.js and index.css files.
 
 Either way, include index.js/index.css in your html file, then instantiate the component:
-```
+```javascript
 const pb = new ProgressBar({
         target: document.getElementById('demo'),
         props: {
@@ -96,7 +96,7 @@ const pb = new ProgressBar({
 ```
 This creates a standard progressbar with 20% progression.
 
-```
+```javascript
 const pb = new ProgressBar({
         target: document.getElementById('demo'),
         style: 'radial',
@@ -106,8 +106,6 @@ const pb = new ProgressBar({
 });
 ```
 This creates a radial progressbar with 2 series (20% + 10%).
-
-Take a look at some [working examples](https://okrad.github.io/svelte-progressbar)!
 
 # API
 **ProgressBar(options)**: The constructor. Available props are:
@@ -141,10 +139,63 @@ series: [
 * bgColor: if addBackground is true, specifies the color of the background bar
 * stackSeries: currently available for "radial" style only. If true (default), series will be stacked one after the other. If false, series will be rendered as independent, concentrical arcs.
 * margin: currently used only for radial non-stacked bar. Determines the space between the series bars.
+* thresholds: list (array) of objects that define which color apply to the progress in relation with the variation of the series value. For example:
 
 **updatePerc(perc, seriesId = 0)**: update the specified series progress percentage
 
+# Examples
+```javascript
+//Linear progress with single series
+new ProgressBar({
+  target: document.getElementById('pb_container'),
+  props: {
+    series: [90]
+  }
+});
+
+//Linear progress with two series
+new ProgressBar({
+  target: document.getElementById('pb_container'),
+  props: {
+    series: [40, 25]
+  }
+});
+
+//Linear progress with "thin" style and two series
+new ProgressBar({
+  target: document.getElementById('demo3'),
+  props: {
+    style: 'thin',
+    series: [30, 15]
+  }
+});
+
+//Radial progress bar with single series and thresholds
+new ProgressBar({
+  target: document.getElementById('pb_container'),
+  props: {
+    style: 'radial',
+    series: [80],
+    thickness: 10,
+    thresholds: [
+      {
+        till: 50,       //Color stays red from 0% to 50%
+        color: '#800000'
+      },
+      {
+        till: 100,      //Color goes green from 51% to 100%
+        color: '#008000'
+      }
+    ]
+}
+});
+```
+Take a look at these [working examples](https://okrad.github.io/svelte-progressbar)!
+
+
 # Changelog
+2020/03/17: Version 1.4.0. Added thresholds, store refactorization
+
 2020/02/07: Version 1.3.1. Added "addBackground", "bgColor", "stackSeries", "margin" parameters.
 Introduced "legacy" mode for compatibility with IE/Edge.
 
