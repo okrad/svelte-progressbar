@@ -3,7 +3,7 @@
 	export let thickness;
 	export let bg = false;
 
-	const store = serie.store;
+	$: store = serie.store;
 
 	if(!thickness)
 		thickness = 2;

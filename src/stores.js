@@ -1,24 +1,37 @@
 import { tweened } from 'svelte/motion';
 import { cubicOut } from 'svelte/easing';
-import { derived, readable } from 'svelte/store';
+import { derived, readable} from 'svelte/store';
 
 const twOpts = {
 	duration: 1000,
 	easing: cubicOut
 };
 
-export function serieStore(serie, thresholds) {
+export function stopStore(serie, thresholds) {
 
 	const s = tweened({
 		offset: 0,
 		prevOffset: 0,
-		color: serie.color
+		color: serie.color,
 	}, {
 		...twOpts,
 		interpolate: (startVal, targetVal) => t => {
+
+			let offset, prevOffset;
+
+			if(targetVal.offset > startVal.offset)
+				offset = startVal.offset + Math.abs(targetVal.offset - startVal.offset) * t;
+			else
+				offset = startVal.offset - Math.abs(targetVal.offset - startVal.offset) * t;
+
+			if(targetVal.prevOffset > startVal.prevOffset)
+				prevOffset = startVal.prevOffset + Math.abs(targetVal.prevOffset - startVal.prevOffset) * t;
+			else
+				prevOffset = startVal.prevOffset - Math.abs(targetVal.prevOffset - startVal.prevOffset) * t;
+
 			const val = {
-				offset: (targetVal.offset - startVal.offset) * t,
-				prevOffset: (targetVal.prevOffset - startVal.prevOffset) * t,
+				offset,
+				prevOffset,
 				color: targetVal.color
 			};
 
@@ -30,7 +43,7 @@ export function serieStore(serie, thresholds) {
 
 		let color = serie.color;
 
-		if(thresholds && thresholds.length >0 ) {
+		if(thresholds && thresholds.length > 0) {
 			const thres = thresholds.find((colInfo, idx) => (perc <= colInfo.till || idx == thresholds.length - 1));
 
 			if(thres)
@@ -53,7 +66,26 @@ export function valueStore(initVal, forceContent) {
 
 	if(!forceContent) {
 
-		const valueStore = tweened(initVal, twOpts);
+		let valueStore = tweened(initVal, {
+			...twOpts,
+			interpolate: (startVal, targetVal) => t => {
+
+				if(startVal.length != targetVal.length)
+					startVal = targetVal;
+
+				return startVal.map((v, idx) => {
+
+					let nextVal;
+
+					if(targetVal[idx] > v)
+						nextVal = v + (targetVal[idx] - v) * t;
+					else
+						nextVal = v - (v - targetVal[idx]) * t;
+
+					return nextVal;
+				});
+			}
+		});
 
 		valStore = derived(
 			valueStore,

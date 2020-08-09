@@ -50,23 +50,13 @@ export default app;
 //App.svelte
 <script>
   import ProgressBar from "@okrad/svelte-progressbar";
-
   export let series = [];
-
-  let bar;
-
-  const updateBar = values => {
-        values.forEach((v, i) => bar.updatePerc(v, i));
-  };
-
-  const resetBar = () => updateBar([0, 0]);
-
 </script>
 
-<ProgressBar {series} bind:this={bar} />
+<ProgressBar {series} />
 
-<button on:click={() => updateBar([100, 100])}>update</button>
-<button on:click={resetBar}>reset</button>
+<button on:click={() => series = [50, 50]}>fill</button>
+<button on:click={() => series = [0, 0]}>clear</button>
 ```
 
 ## Building from source
@@ -139,7 +129,7 @@ series: [
 * bgColor: if addBackground is true, specifies the color of the background bar
 * stackSeries: currently available for "radial" style only. If true (default), series will be stacked one after the other. If false, series will be rendered as independent, concentrical arcs.
 * margin: currently used only for radial non-stacked bar. Determines the space between the series bars.
-* thresholds: list (array) of objects that define which color apply to the progress in relation with the variation of the series value. For example:
+* thresholds: list (array) of objects that define which color apply to the progress in relation with the variation of the series value.
 
 **updatePerc(perc, seriesId = 0)**: update the specified series progress percentage
 
@@ -194,6 +184,8 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+2020/08/09: Version 1.5.0. _series_ prop become reactive
+
 2020/03/17: Version 1.4.0. Added thresholds, store refactorization
 
 2020/02/07: Version 1.3.1. Added "addBackground", "bgColor", "stackSeries", "margin" parameters.

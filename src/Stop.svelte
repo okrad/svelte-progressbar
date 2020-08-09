@@ -2,7 +2,7 @@
 	export let serie;
 	export let overallPerc;
 
-	const store = serie.store;
+	$: store = serie.store;
 </script>
 
 <stop offset="{Math.round($store.prevOffset * 100 / $overallPerc)}%" stop-color="{$store.color}" class="{serie.cls}"/>

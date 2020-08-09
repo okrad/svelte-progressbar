@@ -1,8 +1,10 @@
+<svelte:options accessors />
 <script>
-	import { serieStore, valueStore } from './stores.js';
+	import { stopStore, valueStore } from './stores.js';
 	import RadialProgressBar from './RadialProgressBar.svelte';
 	import LinearProgressBar from './LinearProgressBar.svelte';
 
+	export let series = [];
 	export let style = 'default'; // [thin, radial]
 	export let showProgressValue = true;
 	export let width = null;
@@ -35,48 +37,47 @@
 		];
 	}
 
-	export let series = [];
+	let valStore = valueStore(Array(series.length).fill(0), forceContent);
 
-	if(!Array.isArray(series))
-		series = [series];
-
-	series = series.map((s, idx) => {
-		if(typeof s != 'object')
-			s = {perc: s};
-
-		if(!s.color) {
- 			if(thresholds.length > 0 && thresholds[0].color) {
-				s.color = thresholds[0].color;
-			}
-			else if(colors) {
-				s.color = colors[idx % colors.length];
-			}
-		}
-
-		s.store = serieStore(s, thresholds);
-
-		return s;
-	});
-
-	const valStore = valueStore(Array(series.length).fill(0), forceContent);
+	let startOffset = 0;
 
 	$: {
-		$valStore = series.map(s => s.perc);
 
-		let startOffset = 0;
+		startOffset = 0;
 
-		series.forEach((s, idx) => {
+		if(!Array.isArray(series))
+			series = [series];
+
+		series = series.map((s, idx) => {
+			if(typeof s != 'object')
+				s = {perc: s};
+
+			if(!s.color) {
+				if(thresholds.length > 0 && thresholds[0].color) {
+					s.color = thresholds[0].color;
+				}
+				else if(colors) {
+					s.color = colors[idx % colors.length];
+				}
+			}
+
+			s.store = stopStore(s, thresholds);
 
 			s.store.setPerc(s.perc, startOffset);
 
 			if(stackSeries)
 				startOffset += s.perc;
+
+			return s;
 		});
+
+		$valStore = series.map(s => s.perc);
 	}
 
 	export function updatePerc(perc, seriesIdx = 0) {
 		series[seriesIdx].perc = perc;
 	}
+
 </script>
 
 {#if style == 'radial'}

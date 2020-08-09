@@ -1,6 +1,6 @@
 <script>
 	import Arc from './Arc.svelte';
-	import { serieStore } from './stores.js';
+	import { stopStore } from './stores.js';
 
 	export let series = [];
 	export let thickness = 5;
@@ -33,16 +33,17 @@
 		color: '#fff'
 	};
 
-	maskSerie.store = serieStore(maskSerie, []);
-
-	series.forEach((s, idx) => {
-		if(!stackSeries)
-			s.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
-		else
-			s.radius = 50 - thickness / 2;
-	});
+	maskSerie.store = stopStore(maskSerie, []);
 
 	$: {
+
+		series.forEach((s, idx) => {
+			if(!stackSeries)
+				s.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
+			else
+				s.radius = 50 - thickness / 2;
+		});
+
 		maskSerie.store.setPerc(series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0), 0);
 	}
 </script>
