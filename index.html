@@ -5,13 +5,30 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Svelte progress bar examples</title>
-	<script src="./main.js"></script>
+	<script src="scripts/index.js"></script>
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
 	<h1>Svelte Progress bar</h1>
+	<a href="https://github.com/okrad/svelte-progressbar" class="github-fork">
+		<img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1">
+	</a>
+
+	<p>A multi-series SVG progress bar component made with Svelte 3. It can be rendered both as a linear or radial progressbar. Progression bars and values are fully animated.</p>
+
+	<p>If rendered as a linear progressbar there are 2 styles supported:</p>
+	<ul>
+    	<li>
+			Standard: featuring inverted text color for the values
+		</li>
+		<li>
+			Thin: the progression bars are rendered as thin bars and the values are placed externally
+		</li>
+	</ul>
+
+	<h2>Examples</h2>
 
 	<section class="examples">
 		<div class="sample">
@@ -131,7 +148,7 @@ new ProgressBar({
 		</div>
 
 		<div class="sample">
-			<h3>A radial progress bar with color interpolation</h3>
+			<h3>A radial progress bar with 1 series and color thresholds</h3>
 
 			<div class="demo">
 				<div id="demo7"></div>
@@ -141,20 +158,18 @@ new ProgressBar({
 	target: document.getElementById('demo7'),
 	props: {
 		style: 'radial',
-		series: [{
-			perc: 30,
-			colors: [
-				{
-					till: 50,
-					color: '#0f0'
-				},
-				{
-					till: 100,
-					color: '#f00'
-				},
-			]
-		}],
-		thickness: 10
+		series: 80,
+		thickness: 10,
+		thresholds: [
+			{
+				till: 50,
+				color: '#800000'
+			},
+			{
+				till: 100,
+				color: '#008000'
+			},
+		]
 	}
 });
 					</code></pre>
@@ -210,11 +225,10 @@ new ProgressBar({
 	</section>
 
 	<script>
-
-		window.pb1 = new ProgressBar({
+		new ProgressBar({
 			target: document.getElementById('demo1'),
 			props: {
-				series: [90]
+				series: 49,
 			}
 		});
 
@@ -259,19 +273,15 @@ new ProgressBar({
 					perc: 30,
 					color: '#2196f3'
 				}],
-				thickness: 10,
-				// width: 200,
+				thickness: 10
 			}
 		});
-
 
 		new ProgressBar({
 			target: document.getElementById('demo7'),
 			props: {
 				style: 'radial',
-				series: [{
-					perc: 30,
-				}],
+				series: 80,
 				thickness: 10,
 				thresholds: [
 					{
