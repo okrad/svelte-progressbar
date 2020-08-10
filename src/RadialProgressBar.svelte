@@ -1,5 +1,6 @@
 <script>
 	import Arc from './Arc.svelte';
+	import SeriesArc from './SeriesArc.svelte';
 	import { stopStore } from './stores.js';
 
 	export let series = [];
@@ -13,6 +14,8 @@
 	export let addBackground = true;
 	export let bgColor = '#e5e5e5';
 	export let valStore;
+	export let startAngle = 0;
+	export let endAngle = 360;
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -21,9 +24,18 @@
 		//Default width when not specified
 		width = 75;
 
-	if(height == null)
+	if(height == null) {
 		//Default height when not specified
-		height = 100;
+		height = (endAngle - startAngle) > 180 ? 100 : 50;
+	}
+
+	let textY = 50;
+	let baseline = 'central';
+
+	if(endAngle - startAngle <= 180) {
+		textY = 100;
+		baseline = 'auto';
+	}
 
 	if(textSize == null)
 		textSize = 150;
@@ -36,7 +48,6 @@
 	maskSerie.store = stopStore(maskSerie, []);
 
 	$: {
-
 		series.forEach((s, idx) => {
 			if(!stackSeries)
 				s.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
@@ -44,7 +55,9 @@
 				s.radius = 50 - thickness / 2;
 		});
 
-		maskSerie.store.setPerc(series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0), 0);
+		let overallPerc = series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0);
+
+		maskSerie.store.setPerc(overallPerc, 100 - overallPerc);
 	}
 </script>
 
@@ -58,20 +71,20 @@
 	{#if showProgressValue}
 		<defs>
 			<mask id="{maskId}" x="0" y="0" width="100" height="100%">
-				<Arc serie={maskSerie} {thickness} />
-				<circle cx="50" cy="50" r="{50 - thickness}" fill="#fff" />
+				<SeriesArc serie={maskSerie} {thickness} {startAngle} {endAngle}/>
+				<Arc radius={50 - thickness} fill="#fff" {startAngle} {endAngle} closeArc=true />
 			</mask>
 		</defs>
 	{/if}
 
 	{#each series as serie}
 		{#if addBackground}
-			<circle cx="50" cy="50" r="{serie.radius}" fill="transparent" stroke-width="{thickness}" stroke="{bgColor}"/>
+			<Arc radius={serie.radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 		{/if}
-		<Arc {serie} {thickness} />
+		<SeriesArc {serie} {thickness} {startAngle} {endAngle} />
 	{/each}
 	{#if showProgressValue}
-		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
-		<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="central" x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
+		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$valStore}</text>
+		<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$valStore}</text>
 	{/if}
 </svg>

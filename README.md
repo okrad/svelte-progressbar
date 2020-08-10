@@ -120,7 +120,7 @@ series: [
 ```
 
 
-* style: can be "standard" (default), "thin" or "radial"
+* style: can be "standard" (default), "thin", "radial" or "semicircle"
 * width: determines the width of the whole component
 * height: determines the height of the svg viewbox. If not specified, it defaults to the 14% of the viewbox width for standard progressbars, 1% of the viewbox width for thin progressbars, and to the 100% of the viewbox width for radial ones.
 * thickness: used only for radial progress bars. It determines the thickness of the bar as a unitless number between 0 and 50 (corresponding to the ray of the circle).
@@ -160,6 +160,15 @@ new ProgressBar({
   }
 });
 
+//Semicircular progress bar
+new ProgressBar({
+  target: document.getElementById('demo3'),
+  props: {
+    style: 'semicircle',
+    series: [30]
+  }
+});
+
 //Radial progress bar with single series and thresholds
 new ProgressBar({
   target: document.getElementById('pb_container'),
@@ -184,6 +193,8 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+2020/08/10: Version 1.5.1. Added _semicircle_ bar style
+
 2020/08/09: Version 1.5.0. _series_ prop become reactive
 
 2020/03/17: Version 1.4.0. Added thresholds, store refactorization
