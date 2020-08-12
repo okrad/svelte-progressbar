@@ -83,7 +83,7 @@
 {#if style == 'radial'}
 	<RadialProgressBar {valStore} {series} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
 {:else if style == 'semicircle'}
-	<RadialProgressBar {valStore} {series} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} startAngle=-90 endAngle=90/>
+	<RadialProgressBar {valStore} {series} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} startAngle={-90} endAngle={90}/>
 {:else}
 	<LinearProgressBar {valStore} {series} {style} {addBackground} {bgColor} {width} {height} {textSize} {showProgressValue} />
 {/if}

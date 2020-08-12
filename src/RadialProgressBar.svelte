@@ -56,8 +56,7 @@
 		});
 
 		let overallPerc = series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0);
-
-		maskSerie.store.setPerc(overallPerc, 100 - overallPerc);
+		maskSerie.store.setPerc(overallPerc, 0);
 	}
 </script>
 
