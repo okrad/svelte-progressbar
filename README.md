@@ -193,7 +193,10 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
-2020/08/10: Version 1.5.1. Added _semicircle_ bar style
+
+2020/08/12: Version 1.6.1. Semicircular bar fixes
+
+2020/08/10: Version 1.6.0. Added _semicircle_ bar style
 
 2020/08/09: Version 1.5.0. _series_ prop become reactive
 
