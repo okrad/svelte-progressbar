@@ -3,7 +3,7 @@
   "svelte": "src/ProgressBar.svelte",
   "module": "index.mjs",
   "main": "index.js",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "A multi-series SVG progress bar component made with Svelte 3. It can be rendered both as a linear, radial (circular) or semicircular progressbar.",
   "author": "Enrico Triolo <enrico.triolo@gmail.com>",
   "license": "MIT",
@@ -24,19 +24,19 @@
     "index.css"
   ],
   "devDependencies": {
-    "@babel/core": "^7.8.7",
+    "@babel/core": "^7.11.4",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/runtime": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/runtime": "^7.11.2",
     "rollup": "^1.32.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-serve": "^1.0.1",
-    "rollup-plugin-svelte": "^5.1.1",
+    "rollup-plugin-serve": "^1.0.3",
+    "rollup-plugin-svelte": "^5.2.3",
     "rollup-plugin-terser": "^5.3.0",
-    "svelte": "^3.20.0"
+    "svelte": "^3.24.1"
   },
   "scripts": {
     "build": "rollup -c",
@@ -46,6 +46,6 @@
     "dev": "rollup -c -w --environment BUILD:dev"
   },
   "dependencies": {
-    "core-js": "^3.6.4"
+    "core-js": "^3.6.5"
   }
 }
