@@ -222,6 +222,27 @@ new ProgressBar({
 				</div>
 			</div>
 		</div>
+
+		<div class="sample">
+			<h3>A radial stacked progress bar with 2 series</h3>
+
+			<div class="demo">
+				<div id="demo10"></div>
+				<div class="code">
+					<pre><code>
+new ProgressBar({
+	target: document.getElementById('demo10'),
+	props: {
+		style: 'radial',
+		series: [30, 20],
+		thickness: 10,
+		textSize: 80,
+	}
+});
+					</code></pre>
+				</div>
+			</div>
+		</div>
 	</section>
 
 	<script>
@@ -317,6 +338,16 @@ new ProgressBar({
 					color: '#2196f3'
 				}],
 				thickness: 10,
+			}
+		});
+
+		new ProgressBar({
+			target: document.getElementById('demo10'),
+			props: {
+				style: 'radial',
+				series: [30, 20],
+				thickness: 10,
+				textSize: 80,
 			}
 		});
 
