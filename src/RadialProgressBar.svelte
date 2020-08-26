@@ -58,6 +58,7 @@
 		let overallPerc = series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0);
 		maskSerie.store.setPerc(overallPerc, 0);
 	}
+
 </script>
 
 <style>
@@ -76,12 +77,19 @@
 		</defs>
 	{/if}
 
-	{#each series as serie}
-		{#if addBackground}
+	<!-- If series don't have to be stacked, add only one background arc -->
+	{#if addBackground && stackSeries}
+		<Arc radius={maskSerie.radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
+	{/if}
+
+	{#each series as serie, idx}
+		<!-- If series have to be stacked, add one background arc with concentric radius for each series  -->
+		{#if !stackSeries && addBackground}
 			<Arc radius={serie.radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 		{/if}
 		<SeriesArc {serie} {thickness} {startAngle} {endAngle} />
 	{/each}
+
 	{#if showProgressValue}
 		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$valStore}</text>
 		<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$valStore}</text>
