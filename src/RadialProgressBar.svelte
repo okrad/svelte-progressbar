@@ -1,9 +1,8 @@
 <script>
 	import Arc from './Arc.svelte';
 	import SeriesArc from './SeriesArc.svelte';
-	import { stopStore } from './stores.js';
+	import { seriesStore } from './stores.js';
 
-	export let series = [];
 	export let thickness = 5;
 	export let width = null;
 	export let height = null;
@@ -13,9 +12,11 @@
 	export let margin = 0;
 	export let addBackground = true;
 	export let bgColor = '#e5e5e5';
-	export let valStore;
 	export let startAngle = 0;
 	export let endAngle = 360;
+	export let colors;
+	export let thresholds;
+	export let store;
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -40,24 +41,13 @@
 	if(textSize == null)
 		textSize = 150;
 
-	const maskSerie = {
-		radius: 50 - thickness / 2,
-		color: '#fff'
-	};
+	const maskSeries = [{
+		perc: $store.overallPerc,
+		radius: 50 - thickness,
+		color: '#fff',
+	}];
 
-	maskSerie.store = stopStore(maskSerie, []);
-
-	$: {
-		series.forEach((s, idx) => {
-			if(!stackSeries)
-				s.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
-			else
-				s.radius = 50 - thickness / 2;
-		});
-
-		let overallPerc = series.reduce((a, s) => (a + s.perc) < 100 ? a + s.perc : 100, 0);
-		maskSerie.store.setPerc(overallPerc, 0);
-	}
+	const maskStore = seriesStore(maskSeries, colors, thresholds, false, thickness, margin);
 
 </script>
 
@@ -68,10 +58,11 @@
 </style>
 
 <svg class="progressbar progressbar-radial" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
+
 	{#if showProgressValue}
 		<defs>
 			<mask id="{maskId}" x="0" y="0" width="100" height="100%">
-				<SeriesArc serie={maskSerie} {thickness} {startAngle} {endAngle}/>
+				<SeriesArc store={maskStore} serieIdx={0} {thickness} {startAngle} {endAngle} />
 				<Arc radius={50 - thickness} fill="#fff" {startAngle} {endAngle} closeArc=true />
 			</mask>
 		</defs>
@@ -79,19 +70,19 @@
 
 	<!-- If series don't have to be stacked, add only one background arc -->
 	{#if addBackground && stackSeries}
-		<Arc radius={maskSerie.radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
+		<Arc radius={$maskStore.series[0].radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 	{/if}
 
-	{#each series as serie, idx}
+	{#each $store.series as serie, idx}
 		<!-- If series have to be stacked, add one background arc with concentric radius for each series  -->
 		{#if !stackSeries && addBackground}
 			<Arc radius={serie.radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 		{/if}
-		<SeriesArc {serie} {thickness} {startAngle} {endAngle} />
+		<SeriesArc {store} serieIdx={idx} {thickness} {startAngle} {endAngle} />
 	{/each}
 
 	{#if showProgressValue}
-		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$valStore}</text>
-		<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$valStore}</text>
+		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$store.label}</text>
+		<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$store.label}</text>
 	{/if}
 </svg>

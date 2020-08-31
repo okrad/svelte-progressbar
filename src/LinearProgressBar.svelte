@@ -1,10 +1,4 @@
 <script>
-	import { tweened } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
-	import { getContext } from 'svelte';
-	import Stop from './Stop.svelte';
-
-	export let series = [];
 	export let style = 'default';
 	export let rx = 2;
 	export let ry = 2;
@@ -14,9 +8,8 @@
 	export let showProgressValue = true;
 	export let addBackground = true;
 	export let bgColor = null;
-	export let valStore;
+	export let store;
 
-	const minOverallPerc = 0.001;
 	const ts = new Date().getTime();
 
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -42,16 +35,6 @@
 		ypos = 100 - height;
 	}
 
-	//Start with a number slightly greater than 0 to avoid divisions by zero when computing stops
-	const overallPerc = tweened(minOverallPerc, {
-		duration: 1000,
-		easing: cubicOut
-	});
-
-	$: {
-		overallPerc.set(series.reduce((a, s) => a + s.perc < 100 ? a + s.perc : 100, minOverallPerc));
-	}
-
 	let dominantBaseline = '';
 	let dy = '0';
  	if(window && (window.navigator.userAgent.indexOf('Trident') > -1 || window.navigator.userAgent.indexOf('Edge') > -1)) {
@@ -62,6 +45,7 @@
 	else {
 		dominantBaseline = 'central';
 	}
+
 </script>
 
 <style>
@@ -81,13 +65,13 @@
 <svg class="progressbar progressbar-{style}" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
 	<defs>
 		<linearGradient id="{grId}">
-			{#each series as serie}
-				<Stop {serie} {overallPerc}/>
+			{#each $store.series as serie, seriesIdx}
+				<stop offset="{Math.round($store.series[seriesIdx].perc * 100 / $store.overallPerc)}%" stop-color="{$store.series[seriesIdx].color}" />
 			{/each}
 		</linearGradient>
 		{#if style == 'default' && showProgressValue}
 			<mask id="{maskId}" x="0" y="0" width="100" height="100%">
-				<rect width="{100 - $overallPerc}%" height="100%" x="{$overallPerc}%" y="0" fill="#fff" />
+				<rect width="{100 - $store.overallPerc}%" height="100%" x="{$store.overallPerc}%" y="0" fill="#fff" />
 			</mask>
 		{/if}
 	</defs>
@@ -96,18 +80,18 @@
 		{#if addBackground}
 			<rect width="100" height="100%" x="0" y="0" fill={bgColor} class="progress-bg"></rect>
 		{/if}
-		<rect width="{$overallPerc}%" height="100%" x="0" y="0" fill="url(#{grId})"></rect>
+		<rect width="{$store.overallPerc}%" height="100%" x="0" y="0" fill="url(#{grId})"></rect>
 		{#if showProgressValue}
-			<text class="progress-value" text-anchor="middle" x="50%" y="-100%" font-size="{textSize}%">{$valStore}</text>
+			<text class="progress-value" text-anchor="middle" x="50%" y="-100%" font-size="{textSize}%">{$store.label}</text>
 		{/if}
 	{:else}
 		{#if addBackground}
 			<rect width="100" height="100%" {rx} {ry} y="0" fill={bgColor} class="progress-bg"></rect>
 		{/if}
-		<rect width="{$overallPerc}%" height="100%" {rx} {ry} y="0" fill="url(#{grId})"></rect>
+		<rect width="{$store.overallPerc}%" height="100%" {rx} {ry} y="0" fill="url(#{grId})"></rect>
 		{#if showProgressValue}
-			<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
-			<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$valStore}</text>
+			<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$store.label}</text>
+			<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$store.label}</text>
 		{/if}
 	{/if}
 </svg>

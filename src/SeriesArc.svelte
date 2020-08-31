@@ -1,19 +1,17 @@
 <script>
 	import {getArcPath} from './utils.js';
 
-	export let serie;
 	export let thickness;
 	export let startAngle;
 	export let endAngle;
 	export let bg = false;
-
-	$: store = serie.store;
+	export let serieIdx;
+	export let store;
 
 	if(!thickness)
 		thickness = 2;
 
-	function getPercArcPath(x, y, radius, startPerc, endPerc){
-
+	function getPercArcPath(x, y, radius, startPerc, endPerc) {
 		if(startPerc < 0)
 			startPerc = 0;
 
@@ -25,10 +23,9 @@
 
 		return getArcPath(x, y, radius, sAngle, eAngle, false);
 	}
-
 </script>
 {#if !bg}
-	<path d="{getPercArcPath(50, 50, serie.radius, $store.prevOffset, $store.offset)}" fill="transparent" stroke="{$store.color}" stroke-width="{thickness}" class="pb-arc {serie.cls ? serie.cls : ''}"/>
+	<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, $store.series[serieIdx].prevOffset, $store.series[serieIdx].prevOffset + $store.series[serieIdx].perc)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
 {:else}
-	<path d="{getPercArcPath(50, 50, serie.radius, 0, 100)}" fill="transparent" stroke="{$store.color}" stroke-width="{thickness}" class="pb-arc {serie.cls ? serie.cls: ''}"/>
+	<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, 0, 100)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
 {/if}
