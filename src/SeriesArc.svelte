@@ -7,6 +7,7 @@
 	export let bg = false;
 	export let serieIdx;
 	export let store;
+	export let stackSeries;
 
 	if(!thickness)
 		thickness = 2;
@@ -25,7 +26,11 @@
 	}
 </script>
 {#if !bg}
-	<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, $store.series[serieIdx].prevOffset, $store.series[serieIdx].prevOffset + $store.series[serieIdx].perc)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
+	{#if stackSeries}
+		<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, $store.series[serieIdx].prevOffset, $store.series[serieIdx].prevOffset + $store.series[serieIdx].perc)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
+	{:else}
+		<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, 0, $store.series[serieIdx].perc)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
+	{/if}
 {:else}
 	<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, 0, 100)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
 {/if}

@@ -13,22 +13,31 @@ function getProgressLabel(series) {
 	}, []).join(' + ');
 }
 
-export function seriesStore(series, colorTable, colorThresholds, stackSeries, thickness, margin) {
+// export function seriesStore(series, colorTable, colorThresholds, stackSeries, thickness, margin) {
+export function seriesStore(series, props) {
+
+	var labelForced = false;
 
 	function getColorForSeries(s, seriesIdx) {
 
 		let color = null;
 
-		if(colorThresholds && colorThresholds.length > 0) {
-			const thres = colorThresholds.find((colInfo, idx) => (s.perc <= colInfo.till || idx == thresholds.length - 1));
+		if(props.thresholds && props.thresholds.length > 0) {
+			const thres = props.thresholds.find((colInfo, idx) => (s.perc <= colInfo.till || idx == thresholds.length - 1));
 
 			if(thres)
 				color = thres.color;
 		}
 
 		if(!color) {
-			const colorTableMaxIndex = colorTable.length;
-			color = colorTable[seriesIdx % colorTableMaxIndex];
+
+			if(series[seriesIdx] && series[seriesIdx].hasOwnProperty('color') && series[seriesIdx].color) {
+				color = series[seriesIdx].color;
+			}
+			else {
+				const colorTableMaxIndex = props.colors.length;
+				color = props.colors[seriesIdx % colorTableMaxIndex];
+			}
 		}
 
 		return color;
@@ -48,10 +57,10 @@ export function seriesStore(series, colorTable, colorThresholds, stackSeries, th
 		data.color = getColorForSeries(data, idx);
 		data.prevOffset = 0;
 
-		if(stackSeries)
-			data.radius = 50 - thickness;
+		if(props.stackSeries)
+			data.radius = 50 - props.thickness;
 		else
-			data.radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
+			data.radius = 50 - (idx + 1) * props.thickness - (idx > 0 ? props.margin : 0);
 
 		return data;
 	};
@@ -59,7 +68,7 @@ export function seriesStore(series, colorTable, colorThresholds, stackSeries, th
 	if(!Array.isArray(series))
 		series = [series];
 
-	const { subscribe, update } = tweened({
+	const { subscribe, set, update } = tweened({
 		series: series.map((s, idx) => series2storeData({perc: 0}, idx)),
 		overallPerc: 0,
 		label: ''
@@ -104,15 +113,15 @@ export function seriesStore(series, colorTable, colorThresholds, stackSeries, th
 
 				overallPerc += newSeries[idx].perc;
 
-				if(stackSeries)
-					newSeries[idx].radius = 50 - thickness;
+				if(props.stackSeries)
+					newSeries[idx].radius = 50 - props.thickness;
 				else
-					newSeries[idx].radius = 50 - (idx + 1) * thickness - (idx > 0 ? margin : 0);
+					newSeries[idx].radius = 50 - (idx + 1) * props.thickness - (idx > 0 ? props.margin : 0);
 			});
 
 			return {
 				series: newSeries,
-				label: getProgressLabel(newSeries),
+				label: labelForced ? from.label : getProgressLabel(newSeries),
 				overallPerc
 			};
 		}
@@ -120,7 +129,7 @@ export function seriesStore(series, colorTable, colorThresholds, stackSeries, th
 
 	return {
 		subscribe,
-
+		set,
 		updateSeries: newSeries => {
 
 			if(!Array.isArray(newSeries))
@@ -160,11 +169,27 @@ export function seriesStore(series, colorTable, colorThresholds, stackSeries, th
 
 				newState.overallPerc = overallOffset;
 
-				newState.label = getProgressLabel(newState.series);
+				if(!labelForced)
+					newState.label = getProgressLabel(newState.series);
+				else
+					newState.label = state.label;
 
 				return newState;
 			});
 
+		},
+
+		updateLabel: newLabel => {
+			if(newLabel) {
+				labelForced = true;
+				update(state => {
+					return {
+						series: state.series.map(s => s),
+						overallPerc: state.overallPerc,
+						label: newLabel
+					};
+				});
+			}
 		}
 	};
 

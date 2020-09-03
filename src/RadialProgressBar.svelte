@@ -11,6 +11,7 @@
 	export let stackSeries = true;
 	export let margin = 0;
 	export let addBackground = true;
+	export let fillBackground = false;
 	export let bgColor = '#e5e5e5';
 	export let startAngle = 0;
 	export let endAngle = 360;
@@ -43,17 +44,30 @@
 
 	const maskSeries = [{
 		perc: $store.overallPerc,
-		radius: 50 - thickness,
+		radius: 50 - (thickness * $store.series.length),
+		// radius: 30,
 		color: '#fff',
 	}];
 
-	const maskStore = seriesStore(maskSeries, colors, thresholds, false, thickness, margin);
+	const maskStore = seriesStore(maskSeries, {colors, thresholds, stackSeries: false, thickness, margin});
 
 </script>
 
 <style>
 	.progress-value-inverted {
 		fill: #fff;
+	}
+
+	.progress-value-content {
+		position:absolute;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0;
+		display:flex;
+		flex-flow:column;
+		justify-content: center;
+		align-items: center;
 	}
 </style>
 
@@ -70,19 +84,23 @@
 
 	<!-- If series don't have to be stacked, add only one background arc -->
 	{#if addBackground && stackSeries}
-		<Arc radius={$maskStore.series[0].radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
+		<Arc radius={$maskStore.series[0].radius} fill="{fillBackground ? bgColor : 'transparent'}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 	{/if}
 
 	{#each $store.series as serie, idx}
 		<!-- If series have to be stacked, add one background arc with concentric radius for each series  -->
 		{#if !stackSeries && addBackground}
-			<Arc radius={serie.radius} fill="transparent" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
+			<Arc radius={serie.radius} fill="{fillBackground ? bgColor : 'transparent'}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 		{/if}
-		<SeriesArc {store} serieIdx={idx} {thickness} {startAngle} {endAngle} />
+		<SeriesArc {store} serieIdx={idx} {thickness} {startAngle} {endAngle} {stackSeries} />
 	{/each}
 
 	{#if showProgressValue}
-		<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$store.label}</text>
-		<text mask="url(#{maskId})"  class="progress-value" text-anchor="middle" dominant-baseline="{baseline}" x="50%" y="{textY}%" font-size="{textSize}%">{$store.label}</text>
+		<foreignObject class="progress-value progress-value-inverted" x="0" y="0" width="100%" height="100%">
+			<div class="progress-value-content" style="font-size:{textSize}%">{@html $store.label}</div>
+		</foreignObject>
+		<foreignObject mask="url(#{maskId})"  class="progress-value" x="0" y="0" width="100%" height="100%">
+			<div class="progress-value-content" style="font-size:{textSize}%">{@html $store.label}</div>
+		</foreignObject>
 	{/if}
 </svg>

@@ -1,4 +1,4 @@
-<svelte:options accessors />
+<svelte:options accessors={true}/>
 <script>
 	import { seriesStore } from './stores.js';
 
@@ -15,7 +15,9 @@
 	export let stackSeries = true;
 	export let margin = 0;
 	export let addBackground = true;
+	export let fillBackground = false;
 	export let bgColor = '#e5e5e5';
+	export let valueLabel = null;
 
 	export let colors = [
 		'#FFC107',
@@ -33,9 +35,20 @@
 	if(width == 'auto')
 		width = '100%';
 
-	const store = seriesStore(series, colors, thresholds, stackSeries, thickness, margin);
+	const store = seriesStore(series, {
+		valueLabel,
+		colors,
+		thresholds,
+		stackSeries,
+		thickness,
+		margin
+	});
 
 	$: store.updateSeries(series);
+	$: {
+		if(valueLabel != null)
+			store.updateLabel(valueLabel);
+	}
 
 	export function updatePerc(perc, seriesIdx = 0) {
 
@@ -53,7 +66,7 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
+	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {fillBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
 {:else if style == 'semicircle'}
 	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} startAngle={-90} endAngle={90}/>
 {:else}
