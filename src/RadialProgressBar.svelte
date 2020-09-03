@@ -11,20 +11,23 @@
 	export let stackSeries = true;
 	export let margin = 0;
 	export let addBackground = true;
-	export let fillBackground = false;
 	export let bgColor = '#e5e5e5';
+	export let bgFillColor = 'transparent';
+	export let labelColor = '#555';
 	export let startAngle = 0;
 	export let endAngle = 360;
 	export let colors;
 	export let thresholds;
 	export let store;
+	export let style;
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
 
-	if(width == null)
+	if(width == null) {
 		//Default width when not specified
 		width = 75;
+	}
 
 	if(height == null) {
 		//Default height when not specified
@@ -45,8 +48,7 @@
 	const maskSeries = [{
 		perc: $store.overallPerc,
 		radius: 50 - (thickness * $store.series.length),
-		// radius: 30,
-		color: '#fff',
+		color: '#fff'
 	}];
 
 	const maskStore = seriesStore(maskSeries, {colors, thresholds, stackSeries: false, thickness, margin});
@@ -69,9 +71,14 @@
 		justify-content: center;
 		align-items: center;
 	}
+
+	.progressbar-semicircle .progress-value-content {
+		justify-content: flex-end;
+	}
+
 </style>
 
-<svg class="progressbar progressbar-radial" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar progressbar-{style}" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
 
 	{#if showProgressValue}
 		<defs>
@@ -84,23 +91,23 @@
 
 	<!-- If series don't have to be stacked, add only one background arc -->
 	{#if addBackground && stackSeries}
-		<Arc radius={$maskStore.series[0].radius} fill="{fillBackground ? bgColor : 'transparent'}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
+		<Arc radius={$maskStore.series[0].radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 	{/if}
 
 	{#each $store.series as serie, idx}
 		<!-- If series have to be stacked, add one background arc with concentric radius for each series  -->
 		{#if !stackSeries && addBackground}
-			<Arc radius={serie.radius} fill="{fillBackground ? bgColor : 'transparent'}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
+			<Arc radius={serie.radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 		{/if}
 		<SeriesArc {store} serieIdx={idx} {thickness} {startAngle} {endAngle} {stackSeries} />
 	{/each}
 
 	{#if showProgressValue}
 		<foreignObject class="progress-value progress-value-inverted" x="0" y="0" width="100%" height="100%">
-			<div class="progress-value-content" style="font-size:{textSize}%">{@html $store.label}</div>
+			<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor}">{@html $store.label}</div>
 		</foreignObject>
 		<foreignObject mask="url(#{maskId})"  class="progress-value" x="0" y="0" width="100%" height="100%">
-			<div class="progress-value-content" style="font-size:{textSize}%">{@html $store.label}</div>
+			<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor}">{@html $store.label}</div>
 		</foreignObject>
 	{/if}
 </svg>

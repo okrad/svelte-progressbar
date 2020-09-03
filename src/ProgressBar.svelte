@@ -15,8 +15,9 @@
 	export let stackSeries = true;
 	export let margin = 0;
 	export let addBackground = true;
-	export let fillBackground = false;
+	export let bgFillColor = 'transparent';
 	export let bgColor = '#e5e5e5';
+	export let labelColor = '#555';
 	export let valueLabel = null;
 
 	export let colors = [
@@ -66,9 +67,9 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {fillBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
+	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {bgFillColor} {labelColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
 {:else if style == 'semicircle'}
-	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} startAngle={-90} endAngle={90}/>
+	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {bgFillColor} {labelColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} startAngle={-90} endAngle={90}/>
 {:else}
-	<LinearProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
+	<LinearProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {labelColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
 {/if}

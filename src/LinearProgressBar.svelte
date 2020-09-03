@@ -8,6 +8,7 @@
 	export let showProgressValue = true;
 	export let addBackground = true;
 	export let bgColor = null;
+	export let labelColor = null;
 	export let store;
 
 	const ts = new Date().getTime();
@@ -59,10 +60,32 @@
 
 	.progress-value-inverted {
 		fill: #fff;
+		color: #fff;
 	}
+
+	.progress-value-content {
+		position:absolute;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0;
+		display:flex;
+		flex-flow:row nowrap;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.progressbar-thin .progress-value {
+		overflow: visible;
+	}
+
+	.progressbar-thin .progress-value-content {
+		transform: translateY(-100%);
+	}
+
 </style>
 
-<svg class="progressbar progressbar-{style}" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar progressbar-{style}" viewBox="0 0 100 {height}" width="{width}" height={width * height / 100} xmlns="http://www.w3.org/2000/svg">
 	<defs>
 		<linearGradient id="{grId}">
 			{#each $store.series as serie, seriesIdx}
@@ -82,7 +105,9 @@
 		{/if}
 		<rect width="{$store.overallPerc}%" height="100%" x="0" y="0" fill="url(#{grId})"></rect>
 		{#if showProgressValue}
-			<text class="progress-value" text-anchor="middle" x="50%" y="-100%" font-size="{textSize}%">{$store.label}</text>
+			<foreignObject class="progress-value" x="0" y="0" width="100%" height="100%">
+				<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor};top:-{height}px;">{@html $store.label}</div>
+			</foreignObject>
 		{/if}
 	{:else}
 		{#if addBackground}
@@ -90,8 +115,12 @@
 		{/if}
 		<rect width="{$store.overallPerc}%" height="100%" {rx} {ry} y="0" fill="url(#{grId})"></rect>
 		{#if showProgressValue}
-			<text class="progress-value progress-value-inverted" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$store.label}</text>
-			<text mask="url(#{maskId})" class="progress-value" text-anchor="middle" dominant-baseline="{dominantBaseline}" {dy} x="50%" y="50%" font-size="{textSize}%">{$store.label}</text>
+			<foreignObject class="progress-value progress-value-inverted" x="0" y="0" width="100%" height="100%">
+				<div class="progress-value-content" style="font-size:{textSize}%;">{@html $store.label}</div>
+			</foreignObject>
+			<foreignObject mask="url(#{maskId})" class="progress-value" x="0" y="0" width="100%" height="100%">
+				<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor};">{@html $store.label}</div>
+			</foreignObject>
 		{/if}
 	{/if}
 </svg>
