@@ -13,7 +13,6 @@ function getProgressLabel(series) {
 	}, []).join(' + ');
 }
 
-// export function seriesStore(series, colorTable, colorThresholds, stackSeries, thickness, margin) {
 export function seriesStore(series, props) {
 
 	var labelForced = false;
@@ -23,7 +22,7 @@ export function seriesStore(series, props) {
 		let color = null;
 
 		if(props.thresholds && props.thresholds.length > 0) {
-			const thres = props.thresholds.find((colInfo, idx) => (s.perc <= colInfo.till || idx == thresholds.length - 1));
+			const thres = props.thresholds.find((colInfo, idx) => (s.perc <= colInfo.till || idx == props.thresholds.length - 1));
 
 			if(thres)
 				color = thres.color;

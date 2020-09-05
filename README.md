@@ -225,7 +225,9 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 # Changelog
 
-2020/08/31: Version 1.7.0.
+2020/09/05: Version 1.7.1. Small fixes
+
+2020/08/31: Version 1.7.0
 * Major store refactorization, simplified overall code
 * Label can be set from outside with the _valueLabel_ prop
 * Allow markup (and styling) in label
