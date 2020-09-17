@@ -67,9 +67,59 @@
 </script>
 
 {#if style == 'radial'}
-	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {bgFillColor} {labelColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
+	<RadialProgressBar
+		{store}
+		{colors}
+		{thresholds}
+		{stackSeries}
+		{addBackground}
+		{bgColor}
+		{bgFillColor}
+		{labelColor}
+		{margin}
+		{style}
+		{thickness}
+		{width}
+		{height}
+		{textSize}
+		{showProgressValue}>
+		<slot></slot>
+	</RadialProgressBar>
 {:else if style == 'semicircle'}
-	<RadialProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {bgFillColor} {labelColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} startAngle={-90} endAngle={90}/>
+	<RadialProgressBar
+		{store}
+		{colors}
+		{thresholds}
+		{stackSeries}
+		{addBackground}
+		{bgColor}
+		{bgFillColor}
+		{labelColor}
+		{margin}
+		{style}
+		{thickness}
+		{width}
+		{height}
+		{textSize}
+		{showProgressValue}
+		startAngle={-90}
+		endAngle={90}>
+		<slot></slot>
+	</RadialProgressBar>
 {:else}
-	<LinearProgressBar {store} {colors} {thresholds} {stackSeries} {addBackground} {bgColor} {labelColor} {margin} {style} {thickness} {width} {height} {textSize} {showProgressValue} />
+	<LinearProgressBar
+		{store}
+		{colors}
+		{thresholds}
+		{stackSeries}
+		{addBackground}
+		{bgColor}
+		{labelColor}
+		{margin}
+		{style}
+		{thickness}
+		{width}
+		{height}
+		{textSize}
+		{showProgressValue} />
 {/if}

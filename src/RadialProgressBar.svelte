@@ -110,4 +110,5 @@
 			<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor}">{@html $store.label}</div>
 		</foreignObject>
 	{/if}
+	<slot></slot>
 </svg>
