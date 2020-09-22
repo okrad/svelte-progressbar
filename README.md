@@ -120,7 +120,7 @@ series: [
 ```
 
 
-* valueLabel: the label that must be shown as the progress value. It can be a simple text or a markup fragment. If not specified, the progress percentage will be shown. This property is reactive.
+* valueLabel: the label that must be shown as the progress value. It can be a simple text or a markup fragment. If not specified, the progress percentage will be shown.
 * style: can be "standard" (default), "thin", "radial" or "semicircle"
 * width: determines the width of the whole component
 * height: determines the height of the svg viewbox. If not specified, it defaults to the 14% of the viewbox width for standard progressbars, 1% of the viewbox width for thin progressbars, and to the 100% of the viewbox width for radial ones.
@@ -135,6 +135,26 @@ series: [
 * thresholds: list (array) of objects that define which color apply to the progress in relation with the variation of the series value.
 
 **updatePerc(perc, seriesId = 0)**: update the specified series progress percentage. Since the "series" property is reactive, if you are using the component in a Svelte app, you can simply bind to it and change its value as needed.
+
+### Component composition ###
+
+Within a svelte app, you can add a subcomponent to a radial progress bar:
+
+```
+<ProgressBar style='radial' series={[80]}>
+  <MySubcomponent ... />
+</ProgressBar>
+```
+
+Or you can for example add an HTML fragment by using a foreignObject tag. In this case just make sure to explicitly set the namespace with the xmlns attribute:
+
+```
+<ProgressBar style='radial' series={[80]}>
+  <foreignObject x="0" y="0" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    <button on:click={...}>CLICKME</button>
+  </foreignObject>
+</ProgressBar>
+```
 
 # Examples
 ```
@@ -224,6 +244,8 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+
+2020/09/22: Version 1.8.0. Add component composition handling in radial bars
 
 2020/09/05: Version 1.7.1. Small fixes
 
