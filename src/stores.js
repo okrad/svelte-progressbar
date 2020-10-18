@@ -118,6 +118,9 @@ export function seriesStore(series, props) {
 					newSeries[idx].radius = 50 - (idx + 1) * props.thickness - (idx > 0 ? props.margin : 0);
 			});
 
+			if(overallPerc > 100)
+				overallPerc = 100;
+
 			return {
 				series: newSeries,
 				label: labelForced ? from.label : getProgressLabel(newSeries),
@@ -167,6 +170,9 @@ export function seriesStore(series, props) {
 				});
 
 				newState.overallPerc = overallOffset;
+
+				if(newState.overallPerc > 100)
+					newState.overallPerc = 100;
 
 				if(!labelForced)
 					newState.label = getProgressLabel(newState.series);
