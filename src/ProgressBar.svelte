@@ -66,6 +66,14 @@
 	}
 </script>
 
+<style>
+	:global(.progress-value) {
+		/* Fix for Safari positioning bug of foreignObject */
+		/* See https://bugs.webkit.org/show_bug.cgi?id=23113 */
+		position: fixed;
+	}
+</style>
+
 {#if style == 'radial'}
 	<RadialProgressBar
 		{store}
