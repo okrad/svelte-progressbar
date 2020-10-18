@@ -5,6 +5,8 @@ import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 import serve from 'rollup-plugin-serve';
+import autoPreprocess from 'svelte-preprocess';
+import typescript from '@rollup/plugin-typescript';
 
 const name = 'ProgressBar';
 
@@ -15,6 +17,18 @@ const legacy = !!process.env.LEGACY_BUILD;
 let input = 'src/ProgressBar.svelte';
 let modExports = {};
 
+function typeCheck() {
+  return {
+    writeBundle() {
+      require('child_process').spawn('svelte-check', {
+        stdio: ['ignore', 'inherit', 'inherit'],
+        shell: true
+      });
+    }
+  }
+}
+
+
 if(devel) {
 	modExports = {
 		input: input,
@@ -24,7 +38,11 @@ if(devel) {
 			name: name,
 		}],
 		plugins: [
-			svelte(),
+			typeCheck(),
+			svelte({
+				preprocess: autoPreprocess()
+			}),
+			typescript({ sourceMap: false }),
 			resolve({browser: true}),
 			commonjs(),
 			serve('public')
@@ -56,13 +74,16 @@ else {
 		input: input,
 		output: output,
 		plugins: [
+			typeCheck(),
 			svelte({
 				// we'll extract any component CSS out into
 				// a separate file — better for performance
 				css: css => {
 					css.write('index.css');
-				}
+				},
+				preprocess: autoPreprocess()
 			}),
+			typescript({ sourceMap: true }),
 			resolve({browser: true}),
 			commonjs(),
 			legacy && babel({

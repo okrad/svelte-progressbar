@@ -1,23 +1,25 @@
+// @ts-check
 import { tweened } from 'svelte/motion';
 import { cubicOut } from 'svelte/easing';
+import type {Series, SeriesStore} from './types';
 
 const twOpts = {
 	duration: 1000,
 	easing: cubicOut
 };
 
-function getProgressLabel(series) {
+function getProgressLabel(series): string {
 	return series.reduce((acc, val) => {
 		acc.push(val.perc + '%');
 		return acc;
 	}, []).join(' + ');
 }
 
-export function seriesStore(series, props) {
+export function seriesStore(series: Array<Series>, props): SeriesStore {
 
 	var labelForced = false;
 
-	function getColorForSeries(s, seriesIdx) {
+	function getColorForSeries(s: Series, seriesIdx: number) {
 
 		let color = null;
 
@@ -42,9 +44,9 @@ export function seriesStore(series, props) {
 		return color;
 	};
 
-	function series2storeData(s, idx) {
+	function series2storeData(s: any, idx: number): Series {
 
-		let data = {};
+		let data: any = {};
 
 		if(typeof s != 'object') {
 			data = {perc: s};

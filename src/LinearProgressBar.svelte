@@ -1,16 +1,20 @@
-<script>
-	export let style = 'default';
-	export let rx = 2;
-	export let ry = 2;
-	export let width = null;
-	export let height = null;
-	export let textSize = null;
-	export let showProgressValue = true;
-	export let addBackground = true;
-	export let bgColor = null;
-	export let labelColor = null;
-	export let store;
-	export let cls = '';
+<script lang="ts">
+	// @ts-check
+
+	import type {SeriesStore} from './types';
+
+	export let style: string = 'default';
+	export let rx: number = 2;
+	export let ry: number = 2;
+	export let width: number = null;
+	export let height: number = null;
+	export let textSize: number = null;
+	export let showProgressValue: boolean = true;
+	export let addBackground: boolean = true;
+	export let bgColor: string = null;
+	export let labelColor: string = null;
+	export let store: SeriesStore;
+	export let cls: String = '';
 
 	const ts = new Date().getTime();
 
@@ -30,11 +34,9 @@
 	if(textSize == null)
 		textSize = style == 'thin' ? 40 : 70;
 
-	let ypos = 0;
 	if(style == 'thin') {
 		rx = .2;
 		ry = .2;
-		ypos = 100 - height;
 	}
 
 	let dominantBaseline = '';
