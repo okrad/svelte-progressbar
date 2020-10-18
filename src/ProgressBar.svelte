@@ -1,48 +1,47 @@
 <svelte:options accessors={true}/>
-<script>
-	import { seriesStore } from './stores.js';
+<script lang="ts">
+	// @ts-check
+	import type {SeriesStore, Threshold} from './types';
+	import { seriesStore } from './stores';
 
 	import RadialProgressBar from './RadialProgressBar.svelte';
 	import LinearProgressBar from './LinearProgressBar.svelte';
 
 	export let series = [];
-	export let style = 'default'; // [thin, radial , semicircle]
-	export let showProgressValue = true;
-	export let width = null;
-	export let thickness = null;
-	export let height = null;
-	export let textSize = null;
-	export let stackSeries = true;
-	export let margin = 0;
-	export let addBackground = true;
-	export let bgFillColor = 'transparent';
-	export let bgColor = '#e5e5e5';
-	export let labelColor = '#555';
-	export let valueLabel = null;
-	export let cls = '';
-	export let rx = 2;
-	export let ry = null;
+	export let style: string = 'default'; // [thin, radial , semicircle]
+	export let showProgressValue: boolean = true;
+	export let width: number = null;
+	export let thickness: number = null;
+	export let height: number = null;
+	export let textSize: number = null;
+	export let stackSeries: boolean = true;
+	export let margin: number = 0;
+	export let addBackground: boolean = true;
+	export let bgFillColor: string = 'transparent';
+	export let bgColor: string = '#e5e5e5';
+	export let labelColor: string = '#555';
+	export let valueLabel: string = null;
+	export let cls: string = '';
+	export let rx: number = 2;
+	export let ry: number = null;
 
 	if(ry == null)
 		ry = rx;
 
-	export let colors = [
+	export let colors: Array<string> = [
 		'#FFC107',
 		'#4CAF50',
 		'#03A9F4'
 	];
 
 	//Array of classes / colors that must be applied to the stops whenever the progress percent exceeds the threshold
-	export let thresholds = [];
+	export let thresholds: Array<Threshold> = [];
 	if(thresholds.length > 0) {
 		//Sort thresholds to ensure proper comparison
-		thresholds.sort((t1, t2) => t1.threshold - t2.threshold);
+		thresholds.sort((t1, t2) => t1.till - t2.till);
 	}
 
-	if(width == 'auto')
-		width = '100%';
-
-	const store = seriesStore(series, {
+	const store: SeriesStore = seriesStore(series, {
 		valueLabel,
 		colors,
 		thresholds,
@@ -57,7 +56,7 @@
 			store.updateLabel(valueLabel);
 	}
 
-	export function updatePerc(perc, seriesIdx = 0) {
+	export function updatePerc(perc: number, seriesIdx: number = 0): void {
 
 		if(!Array.isArray(series))
 			series = [series];
@@ -125,15 +124,10 @@
 {:else}
 	<LinearProgressBar
 		{store}
-		{colors}
-		{thresholds}
-		{stackSeries}
 		{addBackground}
 		{bgColor}
 		{labelColor}
-		{margin}
 		{style}
-		{thickness}
 		{width}
 		{height}
 		{textSize}

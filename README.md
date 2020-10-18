@@ -248,9 +248,10 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 # Changelog
 
 2020/10/18: Version 1.9.0.
+* Initial TypeScript support!
 * Add rx, ry attributes to control linear pb radius
 * Add cls parameter for style customization
-* Fix for avoiding progress overflow
+* Fix to avoid progress overflow
 * Fix for Safari positioning bug
 
 2020/09/22: Version 1.8.0. Add component composition handling in radial bars

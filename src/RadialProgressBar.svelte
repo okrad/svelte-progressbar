@@ -1,26 +1,28 @@
-<script>
+<script lang="ts">
+	// @ts-check
 	import Arc from './Arc.svelte';
 	import SeriesArc from './SeriesArc.svelte';
-	import { seriesStore } from './stores.js';
+	import type { SeriesStore, Threshold } from './types';
+	import { seriesStore } from './stores';
 
-	export let thickness = 5;
-	export let width = null;
-	export let height = null;
-	export let textSize = null;
-	export let showProgressValue = true;
-	export let stackSeries = true;
-	export let margin = 0;
-	export let addBackground = true;
-	export let bgColor = '#e5e5e5';
-	export let bgFillColor = 'transparent';
-	export let labelColor = '#555';
-	export let startAngle = 0;
-	export let endAngle = 360;
-	export let colors;
-	export let thresholds;
-	export let store;
-	export let style;
-	export let cls = '';
+	export let thickness: number = 5;
+	export let width: number = null;
+	export let height: number = null;
+	export let textSize: number = null;
+	export let showProgressValue: boolean = true;
+	export let stackSeries: boolean = true;
+	export let margin: number = 0;
+	export let addBackground: boolean = true;
+	export let bgColor: string = '#e5e5e5';
+	export let bgFillColor: string = 'transparent';
+	export let labelColor: string = '#555';
+	export let startAngle: number = 0;
+	export let endAngle: number = 360;
+	export let colors: Array<string>;
+	export let thresholds: Array<Threshold>;
+	export let store: SeriesStore;
+	export let style: string;
+	export let cls: string = '';
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -35,14 +37,6 @@
 		height = (endAngle - startAngle) > 180 ? 100 : 50;
 	}
 
-	let textY = 50;
-	let baseline = 'central';
-
-	if(endAngle - startAngle <= 180) {
-		textY = 100;
-		baseline = 'auto';
-	}
-
 	if(textSize == null)
 		textSize = 150;
 
@@ -53,6 +47,12 @@
 	}];
 
 	const maskStore = seriesStore(maskSeries, {colors, thresholds, stackSeries: false, thickness, margin});
+
+	//Workaround to allow typescript check in the following "each" block
+	//see https://github.com/sveltejs/language-tools/issues/493
+	let storeValue: SeriesStore;
+
+	$: storeValue = $store;
 
 </script>
 
@@ -85,7 +85,7 @@
 		<defs>
 			<mask id="{maskId}" x="0" y="0" width="100" height="100%">
 				<SeriesArc store={maskStore} serieIdx={0} {thickness} {startAngle} {endAngle} />
-				<Arc radius={50 - thickness} fill="#fff" {startAngle} {endAngle} closeArc=true />
+				<Arc radius={50 - thickness} fill="#fff" {startAngle} {endAngle} closeArc={true} />
 			</mask>
 		</defs>
 	{/if}
@@ -95,7 +95,7 @@
 		<Arc radius={$maskStore.series[0].radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 	{/if}
 
-	{#each $store.series as serie, idx}
+	{#each storeValue.series as serie, idx}
 		<!-- If series have to be stacked, add one background arc with concentric radius for each series  -->
 		{#if !stackSeries && addBackground}
 			<Arc radius={serie.radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />

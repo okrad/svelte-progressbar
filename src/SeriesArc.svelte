@@ -1,18 +1,21 @@
-<script>
-	import {getArcPath} from './utils.js';
+<script lang="ts">
+	// @ts-check
+	import type {SeriesStore} from './types';
 
-	export let thickness;
-	export let startAngle;
-	export let endAngle;
-	export let bg = false;
-	export let serieIdx;
-	export let store;
-	export let stackSeries;
+	import {getArcPath} from './utils';
+
+	export let thickness: number;
+	export let startAngle: number;
+	export let endAngle: number;
+	export let bg: boolean = false;
+	export let serieIdx: number;
+	export let store: SeriesStore;
+	export let stackSeries: boolean;
 
 	if(!thickness)
 		thickness = 2;
 
-	function getPercArcPath(x, y, radius, startPerc, endPerc) {
+	function getPercArcPath(x: number, y: number, radius: number, startPerc: number, endPerc: number): string {
 		if(startPerc < 0)
 			startPerc = 0;
 

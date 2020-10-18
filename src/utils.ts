@@ -1,4 +1,11 @@
-export function getArcPath(x, y, radius, startAngle, endAngle, closed){
+// @ts-check
+
+interface CartesianCoords {
+	x: number,
+	y: number
+};
+
+export function getArcPath(x: number, y: number, radius: number, startAngle: number, endAngle: number, closed: boolean): string {
 
 	//Avoid overlapping of start and end positions...
 	if(endAngle == 360)
@@ -18,7 +25,7 @@ export function getArcPath(x, y, radius, startAngle, endAngle, closed){
 }
 
 //Based on https://stackoverflow.com/q/5736398
-function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegrees: number): CartesianCoords {
 	angleInDegrees = angleInDegrees % 360;
 	const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
 
