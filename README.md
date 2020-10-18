@@ -133,6 +133,8 @@ series: [
 * stackSeries: currently available for "radial" and "semicircle" styles only. If true (default), series will be stacked one after the other. If false, series will be rendered as independent, concentrical arcs.
 * margin: currently used only for radial non-stacked bar. Determines the space between the series bars.
 * thresholds: list (array) of objects that define which color apply to the progress in relation with the variation of the series value.
+* cls: css class to apply to the main element.
+* rx, ry: horizontal and vertical border radius (for linear progress bars). If ry is not specified, it defaults to rx.
 
 **updatePerc(perc, seriesId = 0)**: update the specified series progress percentage. Since the "series" property is reactive, if you are using the component in a Svelte app, you can simply bind to it and change its value as needed.
 
@@ -244,6 +246,12 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+
+2020/10/18: Version 1.9.0.
+* Add rx, ry attributes to control linear pb radius
+* Add cls parameter for style customization
+* Fix for avoiding progress overflow
+* Fix for Safari positioning bug
 
 2020/09/22: Version 1.8.0. Add component composition handling in radial bars
 
