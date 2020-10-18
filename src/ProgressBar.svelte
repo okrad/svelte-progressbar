@@ -20,6 +20,11 @@
 	export let labelColor = '#555';
 	export let valueLabel = null;
 	export let cls = '';
+	export let rx = 2;
+	export let ry = null;
+
+	if(ry == null)
+		ry = rx;
 
 	export let colors = [
 		'#FFC107',
@@ -133,5 +138,7 @@
 		{height}
 		{textSize}
 		{cls}
-		{showProgressValue} />
+		{showProgressValue}
+		{rx}
+		{ry}/>
 {/if}
