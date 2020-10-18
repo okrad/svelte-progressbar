@@ -20,6 +20,7 @@
 	export let thresholds;
 	export let store;
 	export let style;
+	export let cls = '';
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -78,7 +79,7 @@
 
 </style>
 
-<svg class="progressbar progressbar-{style}" viewBox="0 0 100 {height}" width="{width}" xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar progressbar-{style} {cls}" viewBox="0 0 100 {height}" width="{width}" height="auto" xmlns="http://www.w3.org/2000/svg">
 
 	{#if showProgressValue}
 		<defs>

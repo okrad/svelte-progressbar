@@ -19,6 +19,7 @@
 	export let bgColor = '#e5e5e5';
 	export let labelColor = '#555';
 	export let valueLabel = null;
+	export let cls = '';
 
 	export let colors = [
 		'#FFC107',
@@ -90,6 +91,7 @@
 		{width}
 		{height}
 		{textSize}
+		{cls}
 		{showProgressValue}>
 		<slot></slot>
 	</RadialProgressBar>
@@ -109,6 +111,7 @@
 		{width}
 		{height}
 		{textSize}
+		{cls}
 		{showProgressValue}
 		startAngle={-90}
 		endAngle={90}>
@@ -129,5 +132,6 @@
 		{width}
 		{height}
 		{textSize}
+		{cls}
 		{showProgressValue} />
 {/if}

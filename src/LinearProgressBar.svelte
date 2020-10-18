@@ -10,6 +10,7 @@
 	export let bgColor = null;
 	export let labelColor = null;
 	export let store;
+	export let cls = '';
 
 	const ts = new Date().getTime();
 
@@ -85,7 +86,7 @@
 
 </style>
 
-<svg class="progressbar progressbar-{style}" viewBox="0 0 100 {height}" width="{width}" height={width * height / 100} xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar progressbar-{style} {cls}" viewBox="0 0 100 {height}" width="{width}" height={width * height / 100} xmlns="http://www.w3.org/2000/svg">
 	<defs>
 		<linearGradient id="{grId}">
 			{#each $store.series as serie, seriesIdx}
