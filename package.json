@@ -4,7 +4,8 @@
   "module": "index.mjs",
   "main": "index.js",
   "exports": {
-    ".": "./index.mjs"
+    ".": "./index.mjs",
+    "./package.json": "./package.json"
   },
   "types": "src/types.d.ts",
   "version": "1.9.1",
