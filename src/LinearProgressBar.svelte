@@ -38,18 +38,6 @@
 		rx = .2;
 		ry = .2;
 	}
-
-	let dominantBaseline = '';
-	let dy = '0';
- 	if(typeof window !== 'undefined' && (window.navigator.userAgent.indexOf('Trident') > -1 || window.navigator.userAgent.indexOf('Edge') > -1)) {
-		//Ugly workaround needed only in legacy mode to adjust the vertical positioning of the value
-		//in IE/Edge (that don't support dominant-baseline)...
-		dy = '-.4em';
-	}
-	else {
-		dominantBaseline = 'central';
-	}
-
 </script>
 
 <style>
