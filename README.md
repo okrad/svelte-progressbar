@@ -16,7 +16,7 @@ No dependencies, only 20kb when minified (6.5kb gzipped)!
 npm i @okrad/svelte-progressbar
 ```
 
-### Using in a standard npm module
+### Using in a standard js module
 
 ```javascript
 import ProgressBar from '@okrad/svelte-progressbar';
@@ -65,7 +65,7 @@ export default app;
 npm run build
 ```
 
-Creates unminified index.js and index.css files.
+Creates unminified index.js and index.mjs files.
 
 Or...
 
@@ -73,9 +73,9 @@ Or...
 npm run dist
 ```
 
-Creates minified index.js and index.css files.
+Creates minified index.js and index.mjs files.
 
-Either way, include index.js/index.css in your html file, then instantiate the component:
+Either way, include index.js in your html file, then instantiate the component:
 ```javascript
 const pb = new ProgressBar({
         target: document.getElementById('demo'),
@@ -246,6 +246,9 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+
+2020/11/05: Version 1.9.3.
+* Typescript fixes
 
 2020/11/02: Version 1.9.2. Removed "legacy" build
 
