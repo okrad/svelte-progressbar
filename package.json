@@ -1,6 +1,6 @@
 {
   "name": "@okrad/svelte-progressbar",
-  "svelte": "src/ProgressBar.svelte",
+  "svelte": "index.mjs",
   "module": "index.mjs",
   "main": "index.js",
   "exports": {
@@ -24,8 +24,7 @@
   "files": [
     "src",
     "index.js",
-    "index.mjs",
-    "index.css"
+    "index.mjs"
   ],
   "devDependencies": {
     "@rollup/plugin-typescript": "^6.0.0",

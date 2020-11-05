@@ -64,11 +64,6 @@ else {
 		plugins: [
 			typeCheck(),
 			svelte({
-				// we'll extract any component CSS out into
-				// a separate file — better for performance
-				css: css => {
-					css.write('index.css');
-				},
 				preprocess: autoPreprocess()
 			}),
 			typescript({ sourceMap: true }),
