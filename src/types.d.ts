@@ -25,7 +25,7 @@ declare module "@okrad/svelte-progressbar" {
 			thresholds ?: Array<Threshold>
 		}
 
-	};
+	}
 
 }
 
