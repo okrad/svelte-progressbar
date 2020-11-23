@@ -247,6 +247,9 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 # Changelog
 
+2020/11/23: Version 1.9.4.
+* Small fixes
+
 2020/11/05: Version 1.9.3.
 * Typescript fixes
 
