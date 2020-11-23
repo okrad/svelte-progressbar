@@ -80,7 +80,7 @@
 	<defs>
 		<linearGradient id="{grId}">
 			{#each $store.series as serie, seriesIdx}
-				<stop offset="{Math.round($store.series[seriesIdx].perc * 100 / $store.overallPerc)}%" stop-color="{$store.series[seriesIdx].color}" />
+				<stop offset="{Math.round($store.series[seriesIdx].perc * 100 / $store.overallPerc) || 0}%" stop-color="{$store.series[seriesIdx].color}" />
 			{/each}
 		</linearGradient>
 		{#if style == 'default' && showProgressValue}
