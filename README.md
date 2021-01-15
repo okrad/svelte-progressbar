@@ -136,7 +136,9 @@ series: [
 * cls: css class to apply to the main element.
 * rx, ry: horizontal and vertical border radius (for linear progress bars). If ry is not specified, it defaults to rx.
 
-**updatePerc(perc, seriesId = 0)**: update the specified series progress percentage. Since the "series" property is reactive, if you are using the component in a Svelte app, you can simply bind to it and change its value as needed.
+**updateSeries(series)**: update all of the series. Since the "series" property is reactive, if you are using the component in a Svelte app, you can simply bind to it and change its value as needed.
+
+**updatePerc(perc, seriesId = 0)**: update the specified series progress percentage. Again, since the "series" property is reactive, if you are using the component in a Svelte app, you can simply bind to it and change its value as needed.
 
 ### Component composition ###
 
@@ -246,6 +248,11 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+
+2021/01/15: Version 1.10.0.
+* "color" property is now reactive (and interpolates)
+* "updateSeries" function added
+* Small fix: Avoid style leaking in the global scope
 
 2020/11/23: Version 1.9.4.
 * Small fixes
