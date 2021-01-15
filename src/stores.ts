@@ -1,6 +1,7 @@
 // @ts-check
 import { tweened } from 'svelte/motion';
 import { cubicOut } from 'svelte/easing';
+import {interpolateColor} from './utils';
 import type {Series, SeriesStore} from './types';
 
 const twOpts = {
@@ -52,10 +53,12 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 			data = {perc: s};
 		}
 		else {
-			data.perc = s.perc;
+			data = s;
 		}
 
-		data.color = getColorForSeries(data, idx);
+		if(!data.hasOwnProperty('color'))
+			data.color = getColorForSeries(data, idx);
+
 		data.prevOffset = 0;
 
 		if(props.stackSeries)
@@ -110,7 +113,14 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 					};
 				}
 
-				newSeries[idx].color = getColorForSeries(newSeries[idx], idx);
+				const toColor = to.series[idx].hasOwnProperty('color') ? to.series[idx].color : getColorForSeries(newSeries[idx], idx);
+
+				if(sv.hasOwnProperty('color')) {
+					newSeries[idx].color = interpolateColor(sv.color, toColor, t);
+				}
+				else {
+					newSeries[idx].color = toColor;
+				}
 
 				overallPerc += newSeries[idx].perc;
 
@@ -135,7 +145,6 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 		subscribe,
 		set,
 		updateSeries: newSeries => {
-
 			if(!Array.isArray(newSeries))
 				newSeries = [newSeries];
 

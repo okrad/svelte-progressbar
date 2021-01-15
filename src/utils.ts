@@ -36,3 +36,41 @@ function polarToCartesian(centerX: number, centerY: number, radius: number, angl
 }
 
 
+//Converts a #ffffff hex string into an [r,g,b] array
+//See https://stackoverflow.com/a/5624139
+function hex2rgb(hex: string): number[] {
+
+	if(hex.length == 4) {
+		// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+		const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+		hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+	}
+
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+	return result ? [
+		parseInt(result[1], 16),
+		parseInt(result[2], 16),
+		parseInt(result[3], 16)
+	 ] : null;
+}
+
+function rgb2hex(rgb: number[]): string {
+    return "#" + ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1);
+}
+
+/**
+ *  Interpolate two hex colors
+ */
+export function interpolateColor(hexColor1: string, hexColor2: string, factor: number): string {
+	const rgbColor1 = hex2rgb(hexColor1);
+	const rgbColor2 = hex2rgb(hexColor2);
+
+	let result = rgbColor1.slice();
+	for(let i = 0; i < 3; i++) {
+		result[i] = Math.round(result[i] + factor * (rgbColor2[i] - rgbColor1[i]));
+	}
+
+	return rgb2hex(result);
+}
+
