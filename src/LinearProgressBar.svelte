@@ -49,6 +49,12 @@
 		fill: #f1f1f1;
 	}
 
+	.progress-value {
+		/* Fix for Safari positioning bug of foreignObject */
+		/* See https://bugs.webkit.org/show_bug.cgi?id=23113 */
+		position: fixed;
+	}
+
 	.progress-value-inverted {
 		fill: #fff;
 		color: #fff;
