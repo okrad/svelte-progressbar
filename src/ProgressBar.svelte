@@ -69,6 +69,10 @@
 		}
 
 	}
+
+	export function updateSeries(_series: []): void {
+		series = _series;
+	}
 </script>
 
 {#if style == 'radial'}
