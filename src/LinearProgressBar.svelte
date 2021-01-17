@@ -1,4 +1,5 @@
 <script lang="ts">
+
 	// @ts-check
 
 	import type {SeriesStore} from './types';
@@ -14,7 +15,8 @@
 	export let bgColor: string = null;
 	export let labelColor: string = null;
 	export let store: SeriesStore;
-	export let cls: String = '';
+	export let cls: string = '';
+	export let path: string = null;
 
 	const ts = new Date().getTime();
 
@@ -96,21 +98,13 @@
 		{/if}
 	</defs>
 
-	{#if style == 'thin'}
+	{#if path}
 		{#if addBackground}
-			<rect width="100" height="100%" x="0" y="0" fill={bgColor} class="progress-bg"></rect>
+			<path width="100" height="100%" d={path} y="0" fill={bgColor} class="progress-bg"></path>
 		{/if}
-		<rect width="{$store.overallPerc}%" height="100%" x="0" y="0" fill="url(#{grId})"></rect>
-		{#if showProgressValue}
-			<foreignObject class="progress-value" x="0" y="0" width="100%" height="100%">
-				<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor};top:-{height}px;">{@html $store.label}</div>
-			</foreignObject>
-		{/if}
-	{:else}
-		{#if addBackground}
-			<rect width="100" height="100%" {rx} {ry} y="0" fill={bgColor} class="progress-bg"></rect>
-		{/if}
-		<rect width="{$store.overallPerc}%" height="100%" {rx} {ry} y="0" fill="url(#{grId})"></rect>
+		<svg width="{$store.overallPerc}" height="100%" x="0" y="0" viewBox="0 0 {$store.overallPerc} 100">
+			<path width="100%" height="100%" d={path} y="0" fill="url(#{grId})"></path>
+		</svg>
 		{#if showProgressValue}
 			<foreignObject class="progress-value progress-value-inverted" x="0" y="0" width="100%" height="100%">
 				<div class="progress-value-content" style="font-size:{textSize}%;">{@html $store.label}</div>
@@ -119,5 +113,32 @@
 				<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor};">{@html $store.label}</div>
 			</foreignObject>
 		{/if}
+	{:else}
+		{#if style == 'thin'}
+			{#if addBackground}
+				<rect width="100" height="100%" x="0" y="0" fill={bgColor} class="progress-bg"></rect>
+			{/if}
+			<rect width="{$store.overallPerc}%" height="100%" x="0" y="0" fill="url(#{grId})"></rect>
+			{#if showProgressValue}
+				<foreignObject class="progress-value" x="0" y="0" width="100%" height="100%">
+					<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor};top:-{height}px;">{@html $store.label}</div>
+				</foreignObject>
+			{/if}
+		{:else}
+			{#if addBackground}
+				<rect width="100" height="100%" {rx} {ry} y="0" fill={bgColor} class="progress-bg"></rect>
+			{/if}
+			<rect width="{$store.overallPerc}%" height="100%" {rx} {ry} y="0" fill="url(#{grId})"></rect>
+			{#if showProgressValue}
+				<foreignObject class="progress-value progress-value-inverted" x="0" y="0" width="100%" height="100%">
+					<div class="progress-value-content" style="font-size:{textSize}%;">{@html $store.label}</div>
+				</foreignObject>
+				<foreignObject mask="url(#{maskId})" class="progress-value" x="0" y="0" width="100%" height="100%">
+					<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor};">{@html $store.label}</div>
+				</foreignObject>
+			{/if}
+		{/if}
 	{/if}
+
+
 </svg>

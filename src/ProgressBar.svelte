@@ -24,6 +24,7 @@
 	export let cls: string = '';
 	export let rx: number = 2;
 	export let ry: number = null;
+	export let path: string = null;
 
 	if(ry == null)
 		ry = rx;
@@ -130,5 +131,6 @@
 		{cls}
 		{showProgressValue}
 		{rx}
-		{ry}/>
+		{ry}
+		{path}/>
 {/if}
