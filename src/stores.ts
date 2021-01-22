@@ -9,16 +9,32 @@ const twOpts = {
 	easing: cubicOut
 };
 
-function getProgressLabel(series): string {
-	return series.reduce((acc, val) => {
-		acc.push(val.perc + '%');
-		return acc;
-	}, []).join(' + ');
+function getProgressLabel(series, labelTemplate: string = null): string {
+
+	let lbl = '';
+
+	if(labelTemplate) {
+		lbl = labelTemplate;
+		series.forEach((s, idx) => {
+			const re = new RegExp('%v' + (idx + 1));
+			lbl = lbl.replace(re, s.perc + '%');
+		});
+	}
+	else {
+		lbl = series.reduce((acc, val) => {
+			acc.push(val.perc + '%');
+			return acc;
+		}, []).join(' + ');
+
+	}
+
+	return lbl;
+
 }
 
 export function seriesStore(series: Array<Series>, props): SeriesStore {
 
-	var labelForced = false;
+	var forcedLabel = props.valueLabel ? props.valueLabel : '';
 
 	function getColorForSeries(s: Series, seriesIdx: number) {
 
@@ -59,6 +75,9 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 		if(!data.hasOwnProperty('color'))
 			data.color = getColorForSeries(data, idx);
 
+		if(forcedLabel)
+			data.label = forcedLabel;
+
 		data.prevOffset = 0;
 
 		if(props.stackSeries)
@@ -75,7 +94,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 	const { subscribe, set, update } = tweened({
 		series: series.map((s, idx) => series2storeData({perc: 0}, idx)),
 		overallPerc: 0,
-		label: ''
+		label: forcedLabel ? forcedLabel : ''
 	}, {
 		...twOpts,
 		interpolate: (from, to) => t => {
@@ -135,7 +154,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 
 			return {
 				series: newSeries,
-				label: labelForced ? from.label : getProgressLabel(newSeries),
+				label: getProgressLabel(newSeries, forcedLabel),
 				overallPerc
 			};
 		}
@@ -185,10 +204,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 				if(newState.overallPerc > 100)
 					newState.overallPerc = 100;
 
-				if(!labelForced)
-					newState.label = getProgressLabel(newState.series);
-				else
-					newState.label = state.label;
+				newState.label = getProgressLabel(newState.series, forcedLabel);
 
 				return newState;
 			});
@@ -196,16 +212,18 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 		},
 
 		updateLabel: newLabel => {
+
 			if(newLabel) {
-				labelForced = true;
+				forcedLabel = newLabel;
 				update(state => {
 					return {
 						series: state.series.map(s => s),
 						overallPerc: state.overallPerc,
-						label: newLabel
+						label: getProgressLabel(state.series, forcedLabel)
 					};
 				});
 			}
+
 		}
 	};
 
