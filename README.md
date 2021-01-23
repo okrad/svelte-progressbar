@@ -1,12 +1,12 @@
 # svelte-progressbar
 A multi-series  SVG progress bar component made with Svelte 3.
-It can be rendered both as a linear or radial progressbar. Progression bars and values are fully animated.
+It can be rendered as a **linear**, **radial** (circular), **semicircular** or even **custom-shaped** progressbar. Progression bars and values are fully animated.
 
 If rendered as a linear progressbar there are 2 styles supported:
 * Standard: uses svg masks to display inverted text color for the value.
 * Thin: the progression bars are rendered as thin bars and the values are placed externally
 
-No dependencies, only 20kb when minified (6.5kb gzipped)!
+No dependencies, only 35kb when minified (11kb gzipped)!
 
 # Usage
 
@@ -120,8 +120,8 @@ series: [
 ```
 
 
-* valueLabel: the label that must be shown as the progress value. It can be a simple text or a markup fragment. If not specified, the progress percentage will be shown.
-* style: can be "standard" (default), "thin", "radial" or "semicircle"
+* valueLabel: the label that must be shown as the progress value. It can be a simple text or a markup fragment. The label can contain "markers" in the  form "%1", "%2"... that will be substituted with the value of the corresponding series (for example: "perc 1: %1, perc 2: %2"). If not specified, the progress percentage will be shown.
+* style: can be "standard" (default), "thin", "radial", "semicircle" o "custom"
 * width: determines the width of the whole component
 * height: determines the height of the svg viewbox. If not specified, it defaults to the 14% of the viewbox width for standard progressbars, 1% of the viewbox width for thin progressbars, and to the 100% of the viewbox width for radial ones.
 * thickness: used only for radial progress bars. It determines the thickness of the bar as a unitless number between 0 and 50 (corresponding to the ray of the circle).
@@ -130,11 +130,16 @@ series: [
 * bgColor: if addBackground is true, specifies the color of the background bar
 * bgFillColor: available only for "radial" and "semicircle" bars. If addBackground is true, specifies the color of the "inner circle" of the progress bar.
 * labelColor: specifies the color of the label.
+* invLabelColor: specifies the "inverted" label color.
 * stackSeries: currently available for "radial" and "semicircle" styles only. If true (default), series will be stacked one after the other. If false, series will be rendered as independent, concentrical arcs.
 * margin: currently used only for radial non-stacked bar. Determines the space between the series bars.
 * thresholds: list (array) of objects that define which color apply to the progress in relation with the variation of the series value.
 * cls: css class to apply to the main element.
 * rx, ry: horizontal and vertical border radius (for linear progress bars). If ry is not specified, it defaults to rx.
+* fillDirection: direction of "filling". Can be one of "l2r" (left to right [default]), "r2l" (right to left), "t2b" (top to bottom) o "b2t" (bottom to top).
+* labelAlignX: alignment of the label along the "x" axis. Can be one of "center" (default), "left", "right", "leftOf", "rightOf".
+* labelAlignY: alignment of the label along the "y" axis. Can be one of "middle" (default), "top", "bottom", "above", "below".
+* path: used only for custom progress bars. It defines the svg path that corresponds to the shape of the progress bar. The path should not have any padding around the actual shape.
 
 **updateSeries(series)**: update all of the series. Since the "series" property is reactive, if you are using the component in a Svelte app, you can simply bind to it and change its value as needed.
 
@@ -162,7 +167,7 @@ Or you can for example add an HTML fragment by using a foreignObject tag. In thi
 
 # Examples
 ```
-//Linear progress with single series
+//Linear progress with single series with vanilla js
 new ProgressBar({
   target: document.getElementById('pb_container'),
   props: {
@@ -170,10 +175,10 @@ new ProgressBar({
   }
 });
 
-//Or...
+//Linear progress as a Svelte component
 <ProgressBar series={[90]}/>
 
-//Linear progress with two series
+//Linear progress with two series with vanilla js
 new ProgressBar({
   target: document.getElementById('pb_container'),
   props: {
@@ -181,7 +186,7 @@ new ProgressBar({
   }
 });
 
-//Or...
+//Linear progress with two series as a Svelte component
 <ProgressBar series={[40, 25]}/>
 
 //Linear progress with "thin" style and two series
@@ -193,8 +198,11 @@ new ProgressBar({
   }
 });
 
-//Or...
-<ProgressBar style='thin' series={[30, 15]}/>
+//Custom progress bar
+<ProgressBar
+  style='custom'
+  series={[70]}
+  path="m 99.999994,28.641477 c 0,26.036253 -23.181375,32.218477 -49.999995,47.14281 C 25.522677,62.948324 0,54.67773 0,28.641477 10e-8,2.6052245 24.031722,-6.9568368 50.598798,6.1131375 78.0152,-7.6240828 99.999994,2.6052245 99.999994,28.641477 Z"/>
 
 //Semicircular progress bar
 new ProgressBar({
@@ -248,6 +256,13 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+2021/01/22: Version 1.11.0.
+* Introducing CustomShapeProgressBar!
+* LinearProgressBar has been refectored to use CustomShapeProgressBar
+* Added custom label template
+* x & y label positions can be controlled through the labelAlignX and labelAlignY props
+* inverted label color can be changed with the invLabelColor prop
+* Fill direction can be controlled with the "fillDirection" prop
 
 2021/01/15: Version 1.10.0.
 * "color" property is now reactive (and interpolates)
