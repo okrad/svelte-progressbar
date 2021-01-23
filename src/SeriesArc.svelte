@@ -12,9 +12,6 @@
 	export let store: SeriesStore;
 	export let stackSeries: boolean;
 
-	if(!thickness)
-		thickness = 2;
-
 	function getPercArcPath(x: number, y: number, radius: number, startPerc: number, endPerc: number): string {
 		if(startPerc < 0)
 			startPerc = 0;

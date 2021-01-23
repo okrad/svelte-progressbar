@@ -34,6 +34,11 @@ function getProgressLabel(series, labelTemplate: string = null): string {
 
 export function seriesStore(series: Array<Series>, props): SeriesStore {
 
+	if(props.thresholds && props.thresholds.length > 0) {
+		//Sort thresholds to ensure proper comparison
+		props.thresholds.sort((t1, t2) => t1.till - t2.till);
+	}
+
 	var forcedLabel = props.valueLabel ? props.valueLabel : '';
 
 	function getColorForSeries(s: Series, seriesIdx: number) {
@@ -80,10 +85,12 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 
 		data.prevOffset = 0;
 
-		if(props.stackSeries)
-			data.radius = 50 - props.thickness;
-		else
+		if(props.stackSeries) {
+			data.radius = 50 - (props.thickness * series.length);
+		}
+		else {
 			data.radius = 50 - (idx + 1) * props.thickness - (idx > 0 ? props.margin : 0);
+		}
 
 		return data;
 	};
@@ -144,7 +151,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 				overallPerc += newSeries[idx].perc;
 
 				if(props.stackSeries)
-					newSeries[idx].radius = 50 - props.thickness;
+					newSeries[idx].radius = 50 - (props.thickness * series.length);
 				else
 					newSeries[idx].radius = 50 - (idx + 1) * props.thickness - (idx > 0 ? props.margin : 0);
 			});

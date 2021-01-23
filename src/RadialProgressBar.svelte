@@ -4,6 +4,7 @@
 	import SeriesArc from './SeriesArc.svelte';
 	import type { SeriesStore, Threshold } from './types';
 	import { seriesStore } from './stores';
+	import ProgressLabel from './ProgressLabel.svelte';
 
 	export let thickness: number = 5;
 	export let width: number = null;
@@ -16,6 +17,7 @@
 	export let bgColor: string = '#e5e5e5';
 	export let bgFillColor: string = 'transparent';
 	export let labelColor: string = '#555';
+	export let invLabelColor: string = '#fff';
 	export let startAngle: number = 0;
 	export let endAngle: number = 360;
 	export let colors: Array<string>;
@@ -23,6 +25,17 @@
 	export let store: SeriesStore;
 	export let style: string;
 	export let cls: string = '';
+	export let labelAlignX: string;
+	export let labelAlignY: string;
+
+	if(style == 'semicircle') {
+
+		if(!labelAlignY)
+			labelAlignY = 'bottom';
+
+		startAngle = -90;
+		endAngle = 90;
+	}
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
@@ -38,7 +51,7 @@
 	}
 
 	if(textSize == null)
-		textSize = 150;
+		textSize = 80;
 
 	const maskSeries = [{
 		perc: $store.overallPerc,
@@ -56,34 +69,6 @@
 
 </script>
 
-<style>
-	.progress-value {
-		/* Fix for Safari positioning bug of foreignObject */
-		/* See https://bugs.webkit.org/show_bug.cgi?id=23113 */
-		position: fixed;
-	}
-	.progress-value-inverted {
-		fill: #fff;
-	}
-
-	.progress-value-content {
-		position:absolute;
-		top:0;
-		left:0;
-		right:0;
-		bottom:0;
-		display:flex;
-		flex-flow:column;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.progressbar-semicircle .progress-value-content {
-		justify-content: flex-end;
-	}
-
-</style>
-
 <svg class="progressbar progressbar-{style} {cls}" viewBox="0 0 100 {height}" width="{width}" height="auto" xmlns="http://www.w3.org/2000/svg">
 
 	{#if showProgressValue}
@@ -97,7 +82,7 @@
 
 	<!-- If series don't have to be stacked, add only one background arc -->
 	{#if addBackground && stackSeries}
-		<Arc radius={$maskStore.series[0].radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
+		<Arc radius={$store.series[0].radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 	{/if}
 
 	{#each storeValue.series as serie, idx}
@@ -109,12 +94,16 @@
 	{/each}
 
 	{#if showProgressValue}
-		<foreignObject class="progress-value progress-value-inverted" x="0" y="0" width="100%" height="100%">
-			<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor}">{@html $store.label}</div>
-		</foreignObject>
-		<foreignObject mask="url(#{maskId})"  class="progress-value" x="0" y="0" width="100%" height="100%">
-			<div class="progress-value-content" style="font-size:{textSize}%;color:{labelColor}">{@html $store.label}</div>
-		</foreignObject>
+		<ProgressLabel
+			{store}
+			{textSize}
+			{labelColor}
+			{invLabelColor}
+			{maskId}
+			{style}
+			{labelAlignX}
+			{labelAlignY}>
+		</ProgressLabel>
 	{/if}
 	<slot></slot>
 </svg>
