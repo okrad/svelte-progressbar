@@ -36,12 +36,14 @@ h2 {
 
 .demo {
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row;
 }
 
 .code {
 	background: #f1f1f1;
 	margin-left: 2rem;
+	flex-grow: 1;
+	/* width: 50%; */
 }
 
 pre {
