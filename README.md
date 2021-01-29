@@ -256,6 +256,10 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+2021/01/29: Version 1.11.1.
+* Fixed issue for inverted label not being visible on Chrome 88
+* Fixed a small regression
+
 2021/01/22: Version 1.11.0.
 * Introducing CustomShapeProgressBar!
 * LinearProgressBar has been refectored to use CustomShapeProgressBar
