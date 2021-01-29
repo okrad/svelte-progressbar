@@ -50,7 +50,14 @@
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
 	const grId = 'pb_gradient_' + ts + Math.floor(Math.random() * 999);
 
-	const norm = (p: number, fs: number, s: number): number => (p * fs / s);
+	const norm = (p: number, fs: number, s: number): number => {
+		let n = 0;
+
+		if(s > 0)
+			n = (p * fs / s);
+
+		return n;
+	};
 
 	if(width == null)
 		width = 150;

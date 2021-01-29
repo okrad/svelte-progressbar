@@ -24,8 +24,10 @@
 	$: {
 		lblStyle = [
 			'font-size:' + textSize + '%',
-			'color:' + labelColor
 		];
+
+		if(labelColor)
+			lblStyle.push('color:' + labelColor);
 
 		invLblStyle = [
 			'font-size:' + textSize + '%',
@@ -111,6 +113,8 @@
 	</foreignObject>
 {/if}
 
-<foreignObject mask={showInvertedLabel ? 'url(#' + maskId + ')' : null} class="progress-value progress-value-{style}" x="0" y="0" width="100%" height="100%">
-	<div class="progress-value-content {labelAlignX} {labelAlignY}" style="{lblStyle.join(';')}">{@html $store.label}</div>
-</foreignObject>
+<g mask={showInvertedLabel ? 'url(#' + maskId + ')' : null}>
+	<foreignObject class="progress-value progress-value-{style}" x="0" y="0" width="100%" height="100%">
+		<div class="progress-value-content {labelAlignX} {labelAlignY}" style="{lblStyle.join(';')}">{@html $store.label}</div>
+	</foreignObject>
+</g>
