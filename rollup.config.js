@@ -1,11 +1,12 @@
 import svelte from 'rollup-plugin-svelte';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import pkg from './package.json';
 import serve from 'rollup-plugin-serve';
 import autoPreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
+import replace from '@rollup/plugin-replace';
 
 const name = 'ProgressBar';
 
@@ -34,15 +35,20 @@ if(devel) {
 			file: 'public/main.js',
 			format: 'umd',
 			name: name,
+			sourcemap: true
 		}],
 		plugins: [
 			typeCheck(),
 			svelte({
-				preprocess: autoPreprocess()
+				preprocess: autoPreprocess(),
+				emitCss: false
 			}),
-			typescript({ sourceMap: false }),
+			typescript({ sourceMap: true }),
 			resolve({browser: true}),
 			commonjs(),
+			replace({
+				'outros.c.push': 'if (outros === undefined) { block.o(local); return }\noutros.c.push'
+  			}),
 			serve('public')
 		]
 	};
@@ -54,8 +60,8 @@ else {
 	output = [
 		// { file: pkg.main, 'format': 'cjs' },
 		// { file: pkg.main, 'format': 'iife', name }
-		{ file: pkg.module, 'format': 'es' },
-		{ file: pkg.main, 'format': 'umd', name }
+		{ file: pkg.module, 'format': 'es', sourcemap: false },
+		{ file: pkg.main, 'format': 'umd', name, sourcemap: false }
 	];
 
 	modExports = {
@@ -64,12 +70,19 @@ else {
 		plugins: [
 			typeCheck(),
 			svelte({
-				preprocess: autoPreprocess()
+				preprocess: autoPreprocess(),
+				emitCss: false
 			}),
 			typescript({ sourceMap: true }),
-			resolve({browser: true}),
+			resolve({
+				browser: true,
+				dedupe: ['svelte']
+			}),
 			commonjs(),
-			production && terser()
+			production && terser(),
+			replace({
+				'outros.c.push': 'if (outros === undefined) { block.o(local); return }\noutros.c.push'
+  			}),
 		]
 	};
 }
