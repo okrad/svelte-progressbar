@@ -142,7 +142,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 				const toColor = to.series[idx].hasOwnProperty('color') && to.series[idx].color ? to.series[idx].color : getColorForSeries(newSeries[idx], idx);
 
 				if(sv.hasOwnProperty('color')) {
-					newSeries[idx].color = interpolateColor(sv.color, toColor, t);
+					newSeries[idx].color = interpolateColor(sv.color, toColor, 1);
 				}
 				else {
 					newSeries[idx].color = toColor;

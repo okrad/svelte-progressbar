@@ -69,6 +69,10 @@ export function interpolateColor(hexColor1: string, hexColor2: string, factor: n
 	let result = rgbColor1.slice();
 	for(let i = 0; i < 3; i++) {
 		result[i] = Math.round(result[i] + factor * (rgbColor2[i] - rgbColor1[i]));
+		if(result[i] > 255)
+			result[i] = 255;
+		if(result[i] < 0)
+			result[i] = 0;
 	}
 
 	return rgb2hex(result);
