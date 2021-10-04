@@ -77,7 +77,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 			data = s;
 		}
 
-		if(!data.hasOwnProperty('color'))
+		if(!data.hasOwnProperty('color') || !data.color)
 			data.color = getColorForSeries(data, idx);
 
 		if(forcedLabel)
@@ -139,7 +139,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 					};
 				}
 
-				const toColor = to.series[idx].hasOwnProperty('color') ? to.series[idx].color : getColorForSeries(newSeries[idx], idx);
+				const toColor = to.series[idx].hasOwnProperty('color') && to.series[idx].color ? to.series[idx].color : getColorForSeries(newSeries[idx], idx);
 
 				if(sv.hasOwnProperty('color')) {
 					newSeries[idx].color = interpolateColor(sv.color, toColor, t);
