@@ -69,7 +69,7 @@
 
 </script>
 
-<svg class="progressbar progressbar-{style} {cls}" viewBox="0 0 100 {height}" width="{width}" height="auto" xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar progressbar-{style} {cls}" viewBox="0 0 100 {height}" width="{width}" height="{width * height / 100}" xmlns="http://www.w3.org/2000/svg">
 
 	{#if showProgressValue}
 		<defs>
