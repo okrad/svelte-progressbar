@@ -27,7 +27,9 @@
 </script>
 {#if !bg}
 	{#if stackSeries}
-		<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, $store.series[serieIdx].prevOffset, $store.series[serieIdx].prevOffset + $store.series[serieIdx].perc)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
+		{#if $store.series[serieIdx].prevOffset < 100}
+			<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, $store.series[serieIdx].prevOffset, $store.series[serieIdx].prevOffset + $store.series[serieIdx].perc)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
+		{/if}
 	{:else}
 		<path d="{getPercArcPath(50, 50, $store.series[serieIdx].radius, 0, $store.series[serieIdx].perc)}" fill="transparent" stroke="{$store.series[serieIdx].color}" stroke-width="{thickness}" class="pb-arc"/>
 	{/if}
