@@ -33,5 +33,6 @@
 	{width}
 	{height}
 	{store}
-	{labelAlignY}>
+	{labelAlignY}
+	{style}>
 </CustomShapeProgressBar>
