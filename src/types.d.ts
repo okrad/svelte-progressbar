@@ -34,6 +34,7 @@ export interface SeriesStore {
 	set,
 	series ?: Array<Series>,
 	updateSeries: (newSeries: Array<Series>) => void,
+	updatePerc: (perc: number, seriesIdx: number) => void,
 	updateLabel: (newLabel: string) => void
 }
 

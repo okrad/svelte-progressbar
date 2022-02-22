@@ -40,7 +40,8 @@
 	}
 
 	export function updatePerc(perc: number, seriesIdx: number = 0): void {
-
+		store.updatePerc(perc, seriesIdx);
+/*
 		if(!Array.isArray(series))
 			series = [series];
 
@@ -50,7 +51,7 @@
 		else {
 			series[seriesIdx].perc = perc;
 		}
-
+*/
 	}
 
 	export function updateSeries(_series: []): void {

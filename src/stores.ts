@@ -218,6 +218,17 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 
 		},
 
+		updatePerc: (perc, seriesIdx = 0) => {
+			return update(state => {
+				state.series[seriesIdx].perc = perc;
+				state.series[seriesIdx].color = getColorForSeries(state.series[seriesIdx], seriesIdx);
+				state.overallPerc = state.series.reduce((p, s) => p += s.perc, 0);
+				state.label = getProgressLabel(state.series, forcedLabel);
+
+				return state;
+			});
+		},
+
 		updateLabel: newLabel => {
 
 			if(newLabel) {
