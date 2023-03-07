@@ -1,18 +1,18 @@
 <script lang="ts">
 	// @ts-check
-
 	import type {SeriesStore} from './types';
 	import CustomShapeProgressBar from './CustomShapeProgressBar.svelte';
 
 	export let style: string = 'default';
-	export let rx: number = style == 'thin' ? .2 : 2;
-	export let ry: number = style == 'thin' ? .2 : 2;
-	export let width: number = 150;
+	export let rx: number = .1;
+	export let ry: number = .1;
 	export let height: number = style == 'thin' ? 1 : 14;
 	export let store: SeriesStore;
 	export let labelAlignY: string = style == 'thin' ? 'above' : 'middle';
+	export let actWidth;
 
-	const roundedRect = (w: number, h: number, rx: number, ry: number): string => {
+	const roundedRect = (w: number, h: number): string => {
+
 		return [
 			'M 0 ' + ry,
 			'A ' + rx + ' ' + ry + ' 0 0 1 ' + rx + ' 0',
@@ -25,14 +25,15 @@
 			'Z'
 		].join(' ')
 	};
+
 </script>
 
 <CustomShapeProgressBar
 	{...$$props}
-	path="{roundedRect(width, height, rx, ry)}"
-	{width}
+	pathFn={roundedRect}
 	{height}
 	{store}
 	{labelAlignY}
-	{style}>
+	{style}
+	{actWidth}>
 </CustomShapeProgressBar>

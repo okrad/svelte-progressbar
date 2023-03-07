@@ -8,6 +8,14 @@ If rendered as a linear progressbar there are 2 styles supported:
 
 No dependencies, only 35kb when minified (11kb gzipped)!
 
+# Upgrade notice
+The current release is a substantial rewrite of much of the library, and as such it's not guaranteed to be compatible!
+
+The following are the main differences with the previous release:
+
+* If no width is specified, the progress bar will take the whole parent width
+* The "path" parameter has been removed and replaced by the "pathFn" parameter. See the API paragraph for usage info.
+
 # Usage
 
 ## From npm
@@ -122,8 +130,8 @@ series: [
 
 * valueLabel: the label that must be shown as the progress value. It can be a simple text or a markup fragment. The label can contain "markers" in the  form "%1", "%2"... that will be substituted with the value of the corresponding series (for example: "perc 1: %1, perc 2: %2"). If not specified, the progress percentage will be shown.
 * style: can be "standard" (default), "thin", "radial", "semicircle" o "custom"
-* width: determines the width of the whole component
-* height: determines the height of the svg viewbox. If not specified, it defaults to the 14% of the viewbox width for standard progressbars, 1% of the viewbox width for thin progressbars, and to the 100% of the viewbox width for radial ones.
+* width: determines the width of the whole component. If not specified (or set to "auto" or "100%"), the component will occupy the full width of its parent.
+* height: determines the height of the component. If not specified, it defaults to 14px for standard progressbars, 1px for thin progressbars.
 * thickness: used only for radial progress bars. It determines the thickness of the bar as a unitless number between 0 and 50 (corresponding to the ray of the circle).
 * textSize: the size of the font (in percentage) for the progression value (default: 30 for thin progressbars, 70 for default progressbar, 150 for radial)
 * addBackground: determines if a further bar should be added as background to the value bar. Default true.
@@ -139,7 +147,7 @@ series: [
 * fillDirection: direction of "filling". Can be one of "l2r" (left to right [default]), "r2l" (right to left), "t2b" (top to bottom) o "b2t" (bottom to top).
 * labelAlignX: alignment of the label along the "x" axis. Can be one of "center" (default), "left", "right", "leftOf", "rightOf".
 * labelAlignY: alignment of the label along the "y" axis. Can be one of "middle" (default), "top", "bottom", "above", "below".
-* path: used only for custom progress bars. It defines the svg path that corresponds to the shape of the progress bar. The path should not have any padding around the actual shape.
+* pathFn: used only for custom progress bars. It defines a function that must return the svg path that corresponds to the shape of the progress bar. The function receives 2 parameters: the width and the height of the viewbox, to allow scaling the path values to the actual viewbox.
 
 **updateSeries(series)**: update all of the series. Since the "series" property is reactive, if you are using the component in a Svelte app, you can simply bind to it and change its value as needed.
 
@@ -256,6 +264,10 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+2023/02/21: Version 2.0.0
+* Major refactorization, bringing full width support and many other improvements!
+* Moved to vite
+
 2021/02/23: Version 1.11.2.
 * Fixed exception on component destruct
 
