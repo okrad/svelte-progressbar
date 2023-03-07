@@ -2,13 +2,12 @@
 	// @ts-check
 	import Arc from './Arc.svelte';
 	import SeriesArc from './SeriesArc.svelte';
-	import type { SeriesStore, Threshold } from './types';
-	import { seriesStore } from './stores';
 	import ProgressLabel from './ProgressLabel.svelte';
 
+	import type { SeriesStore, Threshold } from './types';
+	import { seriesStore } from './stores';
+
 	export let thickness: number = 5;
-	export let width: number = null;
-	export let height: number = null;
 	export let textSize: number = null;
 	export let showProgressValue: boolean = true;
 	export let stackSeries: boolean = true;
@@ -27,31 +26,46 @@
 	export let cls: string = '';
 	export let labelAlignX: string;
 	export let labelAlignY: string;
+	export let actWidth: number = 0;
+
+	let vbHeight = 100;
+	let actHeight: number = 0;
+	let scaleX: number = 1;
+	let scaleY: number = 1;
+
+	$: {
+		if(style == 'semicircle') {
+			actHeight = actWidth / 2;
+			vbHeight = 50;
+		}
+		else {
+			actHeight = actWidth;
+			vbHeight = 100;
+		}
+
+		if(actWidth > 0)
+			scaleX = 100 / actWidth;
+		if(actHeight > 0)
+			scaleY = vbHeight / actHeight;
+	}
 
 	if(style == 'semicircle') {
-
 		if(!labelAlignY)
 			labelAlignY = 'bottom';
 
 		startAngle = -90;
 		endAngle = 90;
 	}
+	else {
+		if(!labelAlignY)
+			labelAlignY = 'middle';
+	}
 
 	const ts = new Date().getTime();
 	const maskId = 'tx_mask_' + ts + Math.floor(Math.random() * 999);
 
-	if(width == null) {
-		//Default width when not specified
-		width = 75;
-	}
-
-	if(height == null) {
-		//Default height when not specified
-		height = (endAngle - startAngle) > 180 ? 100 : 50;
-	}
-
 	if(textSize == null)
-		textSize = 80;
+		textSize = 100;
 
 	const maskSeries = [{
 		perc: $store.overallPerc,
@@ -61,15 +75,9 @@
 
 	const maskStore = seriesStore(maskSeries, {colors, thresholds, stackSeries: false, thickness, margin});
 
-	//Workaround to allow typescript check in the following "each" block
-	//see https://github.com/sveltejs/language-tools/issues/493
-	let storeValue: SeriesStore;
-
-	$: storeValue = $store;
-
 </script>
 
-<svg class="progressbar progressbar-{style} {cls}" viewBox="0 0 100 {height}" width="{width}" height="{width * height / 100}" xmlns="http://www.w3.org/2000/svg">
+<svg class="progressbar progressbar-{style} {cls}" viewBox="0 0 100 {vbHeight}" width="100%" height="{actHeight}" xmlns="http://www.w3.org/2000/svg">
 
 	{#if showProgressValue}
 		<defs>
@@ -85,7 +93,7 @@
 		<Arc radius={$store.series[0].radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
 	{/if}
 
-	{#each storeValue.series as serie, idx}
+	{#each $store.series as serie, idx}
 		<!-- If series have to be stacked, add one background arc with concentric radius for each series  -->
 		{#if !stackSeries && addBackground}
 			<Arc radius={serie.radius} fill="{bgFillColor}" {startAngle} {endAngle} strokeWidth={thickness} stroke={bgColor} />
@@ -102,7 +110,9 @@
 			{maskId}
 			{style}
 			{labelAlignX}
-			{labelAlignY}>
+			{labelAlignY}
+			{scaleX}
+			{scaleY}>
 		</ProgressLabel>
 	{/if}
 	<slot></slot>

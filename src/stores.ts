@@ -86,12 +86,19 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 		data.prevOffset = 0;
 
 		if(props.stackSeries) {
+			data.radius = 50 - ((props.thickness / 2) * series.length);
+		}
+		else {
+			data.radius = 50 - (idx + 1) * (props.thickness / 2) - (idx > 0 ? props.margin : 0);
+		}
+/*
+		if(props.stackSeries) {
 			data.radius = 50 - (props.thickness * series.length);
 		}
 		else {
 			data.radius = 50 - (idx + 1) * props.thickness - (idx > 0 ? props.margin : 0);
 		}
-
+*/
 		return data;
 	};
 
@@ -151,9 +158,9 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 				overallPerc += newSeries[idx].perc;
 
 				if(props.stackSeries)
-					newSeries[idx].radius = 50 - (props.thickness * series.length);
+					newSeries[idx].radius = 50 - ((props.thickness / 2) * series.length);
 				else
-					newSeries[idx].radius = 50 - (idx + 1) * props.thickness - (idx > 0 ? props.margin : 0);
+					newSeries[idx].radius = 50 - (idx + 1) * (props.thickness / 2) - (idx > 0 ? props.margin : 0);
 			});
 
 			if(overallPerc > 100)
