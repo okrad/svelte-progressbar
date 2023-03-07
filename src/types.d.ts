@@ -6,7 +6,7 @@ declare module "@okrad/svelte-progressbar" {
 			series: any,
 			style ?: string,
 			showProgressValue ?: boolean,
-			width ?: number,
+			width ?: number | string,
 			thickness ?: number,
 			height ?: number,
 			textSize ?: number,
