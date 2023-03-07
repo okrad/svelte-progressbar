@@ -9,11 +9,14 @@
 	export let maskId: string;
 	export let labelAlignX: string = 'center'; //center, left ,leftOf, right, rightOf
 	export let labelAlignY: string = 'middle'; //middle, top, bottom, above, below
-	export let showInvertedLabel: boolean = labelAlignX == 'center' && labelAlignY == 'middle'; //top, bottom
+	export let showInvertedLabel: boolean = labelAlignX == 'center' && labelAlignY == 'middle';
 	export let style: string = 'default';
+	export let scaleX: number = 1;
+	export let scaleY: number = 1;
 
 	let lblStyle: Array<string>;
 	let invLblStyle: Array<string>;
+	let labelTranslateY = 0;
 
 	if(textSize == null)
 		textSize = 100;
@@ -22,6 +25,14 @@
 		invLabelColor = '#fff';
 
 	$: {
+
+		if(labelAlignY == 'above') {
+			labelTranslateY = -100;
+		}
+		else if(labelAlignY == 'below') {
+			labelTranslateY = 100;
+		}
+
 		lblStyle = [
 			'font-size:' + textSize + '%',
 		];
@@ -33,6 +44,7 @@
 			'font-size:' + textSize + '%',
 			'color:' + invLabelColor
 		];
+
 	}
 </script>
 
@@ -44,10 +56,6 @@
 		overflow: visible;
 	}
 
-	.progress-value-thin {
-		overflow: visible;
-	}
-
 	.progress-value-content {
 		position:absolute;
 		top:0;
@@ -56,6 +64,7 @@
 		bottom:0;
 		display:flex;
 		flex-flow:row nowrap;
+		transform-origin: top;
 	}
 
 	.progress-value-content.center {
@@ -87,13 +96,13 @@
 	.progress-value-content.below {
 		top: auto;
 		bottom: 0;
-		transform: translateY(100%);
+		transform-origin: bottom;
 	}
 
 	.progress-value-content.above {
 		top: 0;
 		bottom: auto;
-		transform: translateY(-100%);
+		transform-origin: top;
 	}
 
 	.progress-value-content.leftOf {
@@ -108,13 +117,13 @@
 </style>
 
 {#if showInvertedLabel}
-	<foreignObject class="progress-value progress-value-{style} progress-value-inverted" x="0" y="0" width="100%" height="100%">
-		<div class="progress-value-content {labelAlignX} {labelAlignY}" style="{invLblStyle.join(';')}">{@html $store.label}</div>
+	<foreignObject class="progress-value progress-value-{style} progress-value-inverted" x="0" y="0" width="{100 / scaleX}%" height="{100 / scaleY}%" transform="scale({scaleX}, {scaleY})">
+		<div class="progress-value-content {labelAlignX} {labelAlignY}" style="{invLblStyle.join(';')};transform:translateY({labelTranslateY}%)">{@html $store.label}</div>
 	</foreignObject>
 {/if}
 
 <g mask={showInvertedLabel ? 'url(#' + maskId + ')' : null}>
-	<foreignObject class="progress-value progress-value-{style}" x="0" y="0" width="100%" height="100%">
-		<div class="progress-value-content {labelAlignX} {labelAlignY}" style="{lblStyle.join(';')}">{@html $store.label}</div>
+	<foreignObject class="progress-value progress-value-{style}" x="0" y="0" width="{100 / scaleX}%" height="{100 / scaleY}%" transform="scale({scaleX}, {scaleY})">
+		<div class="progress-value-content {labelAlignX} {labelAlignY}" style="{lblStyle.join(';')};transform:translateY({labelTranslateY}%)">{@html $store.label}</div>
 	</foreignObject>
 </g>
