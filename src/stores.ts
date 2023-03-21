@@ -66,7 +66,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 		return color;
 	};
 
-	function series2storeData(s: any, idx: number): Series {
+	function series2storeData(s: Series|number, idx: number): Series {
 
 		let data: any = {};
 
@@ -144,6 +144,7 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 						perc: Math.round(sv.perc - (sv.perc - tv.perc) * t),
 						prevOffset: sv.prevOffset - (sv.prevOffset - tv.prevOffset) * t,
 					};
+
 				}
 
 				const toColor = to.series[idx].hasOwnProperty('color') && to.series[idx].color ? to.series[idx].color : getColorForSeries(newSeries[idx], idx);
@@ -182,10 +183,8 @@ export function seriesStore(series: Array<Series>, props): SeriesStore {
 				newSeries = [newSeries];
 
 			newSeries = newSeries.map(s => {
-
 				if(typeof s != 'object')
 					s = {perc: s};
-
 				return s;
 			});
 
