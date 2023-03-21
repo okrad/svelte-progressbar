@@ -17,10 +17,9 @@ export default defineConfig(({ command, mode }) => {
         formats: ['es', 'umd'],
         fileName: (format) => {
           if(format == 'es')
-            return pkg.module;
+            return pkg.module.split('/').pop();
           else
-            return pkg.main;
-          // 'ProgressBar.js'
+            return pkg.main.split('/').pop();
         }
       },
       watch: mode == 'development' ? {} : null,
