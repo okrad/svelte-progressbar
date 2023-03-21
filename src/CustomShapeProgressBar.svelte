@@ -119,8 +119,10 @@
 	<defs>
 		<linearGradient id="{grId}" x1="{gradientStartPercX}%" x2="{gradientEndPercX}%" y1="{gradientStartPercY}%" y2="{gradientEndPercY}%">
 			{#each $store.series as serie, seriesIdx}
-				<stop offset="{Math.round( $store.series[seriesIdx].prevOffset)}%" stop-color="{$store.series[seriesIdx].color}" />
-				<stop offset="{Math.round( $store.series[seriesIdx].prevOffset + $store.series[seriesIdx].perc)}%" stop-color="{$store.series[seriesIdx].color}" />
+				{#if serie.perc > 0}
+					<stop offset="{Math.round( $store.series[seriesIdx].prevOffset)}%" stop-color="{$store.series[seriesIdx].color}" />
+					<stop offset="{Math.round( $store.series[seriesIdx].prevOffset + $store.series[seriesIdx].perc)}%" stop-color="{$store.series[seriesIdx].color}" />
+				{/if}
 			{/each}
 		</linearGradient>
 		{#if showProgressValue}
