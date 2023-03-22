@@ -1,17 +1,6 @@
 {
   "name": "@okrad/svelte-progressbar",
-  "svelte": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "main": "./dist/index.js",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./src/types.d.ts",
-      "svelte": "./dist/index.mjs"
-    }
-  },
-  "types": "./src/types.d.ts",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A multi-series SVG progress bar component made with Svelte. It can be rendered both as a linear, radial (circular), semicircular or even custom-shaped progressbar.",
   "author": "Enrico Triolo <enrico.triolo@gmail.com>",
   "license": "MIT",
@@ -22,23 +11,40 @@
     "svelte",
     "svg"
   ],
-  "files": ["dist"],
-
-
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.0.2",
-    "@tsconfig/svelte": "^3.0.0",
-    "svelte": "^3.55.1",
-    "svelte-check": "^3.0.3",
-    "svelte-preprocess": "^5.0.1",
-    "tslib": "^2.5.0",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.2"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build --mode development",
-    "dist": "vite build",
-    "build_nominify": "vite build --mode development"
-  }
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build && npm run package",
+		"preview": "vite preview",
+		"package": "svelte-kit sync && svelte-package && publint",
+		"bundle": "vite build -c vite.bundle.config.js --outDir bundle",
+		"prepublishOnly": "npm run package",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/types.d.ts",
+			"svelte": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"peerDependencies": {
+		"svelte": "^3.54.0"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/kit": "^1.5.0",
+		"@sveltejs/package": "^2.0.0",
+		"publint": "^0.1.9",
+		"svelte": "^3.54.0",
+		"svelte-check": "^3.0.1",
+		"tslib": "^2.4.1",
+		"typescript": "^5.0.0",
+		"vite": "^4.2.0"
+	},
+	"svelte": "./dist/index.js",
+	"types": "./dist/types.d.ts",
+	"type": "module"
 }

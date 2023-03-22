@@ -18,27 +18,11 @@ The following are the main differences with the previous release:
 
 # Usage
 
-## From npm
-
 ```
 npm i @okrad/svelte-progressbar
 ```
 
-### Using in a standard js module
-
-```javascript
-import ProgressBar from '@okrad/svelte-progressbar';
-
-const pb = new ProgressBar({
-        target: document.getElementById('demo'),
-        props: {
-                series: 20
-        }
-});
-
-```
-
-### Using in a Svelte app
+Then you can use it like:
 
 ```javascript
 //main.js
@@ -70,20 +54,20 @@ export default app;
 ## Building from source
 
 ```
-npm run build
+npm run package
 ```
 
-Creates unminified index.js and index.mjs files.
+Builds svelte files and transpiles ts into dist/ directory
 
 Or...
 
 ```
-npm run dist
+npm run bundle
 ```
 
-Creates minified index.js and index.mjs files.
+Creates minified index.js and index.mjs files in the bundle/ directory.
 
-Either way, include index.js in your html file, then instantiate the component:
+You can use the index.js bundle by including it in your html file, then instantiating the component:
 ```javascript
 const pb = new ProgressBar({
         target: document.getElementById('demo'),
@@ -264,6 +248,9 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+2023/02/21: Version 2.1.0
+* Sveltekit conversion
+
 2023/02/21: Version 2.0.0
 * Major refactorization, bringing full width support and many other improvements!
 * Moved to vite
