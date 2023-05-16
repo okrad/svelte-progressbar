@@ -1,33 +1,29 @@
-declare module "@okrad/svelte-progressbar" {
+import {SvelteComponentTyped} from "svelte";
 
-	export default class ProgressBar {
-
-		$$prop_def: {
-			series: any,
-			style ?: string,
-			showProgressValue ?: boolean,
-			width ?: number | string,
-			thickness ?: number,
-			height ?: number,
-			textSize ?: number,
-			stackSeries ?: boolean,
-			margin ?: number,
-			addBackground ?: boolean,
-			bgFillColor ?: string,
-			bgColor ?: string,
-			labelColor ?: string,
-			valueLabel ?: string,
-			cls ?: string,
-			rx ?: number,
-			ry ?: number,
-			path ?: string,
-			colors ?: Array<string>,
-			thresholds ?: Array<Threshold>
-		}
-
-	}
-
+interface ProgressBarProps {
+	series: any,
+	style ?: string,
+	showProgressValue ?: boolean,
+	width ?: number | string,
+	thickness ?: number,
+	height ?: number,
+	textSize ?: number,
+	stackSeries ?: boolean,
+	margin ?: number,
+	addBackground ?: boolean,
+	bgFillColor ?: string,
+	bgColor ?: string,
+	labelColor ?: string,
+	valueLabel ?: string,
+	cls ?: string,
+	rx ?: number,
+	ry ?: number,
+	path ?: string,
+	colors ?: Array<string>,
+	thresholds ?: Array<Threshold>
 }
+
+export default class ProgressBar extends SvelteComponentTyped<ProgressBarProps> {}
 
 export interface SeriesStore {
 	subscribe,
