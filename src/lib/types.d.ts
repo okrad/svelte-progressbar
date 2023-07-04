@@ -1,4 +1,4 @@
-import {SvelteComponentTyped} from "svelte";
+import {SvelteComponent} from "svelte";
 
 interface ProgressBarProps {
 	series: any,
@@ -23,7 +23,7 @@ interface ProgressBarProps {
 	thresholds ?: Array<Threshold>
 }
 
-export default class ProgressBar extends SvelteComponentTyped<ProgressBarProps> {}
+export default class ProgressBar extends SvelteComponent<ProgressBarProps> {}
 
 export interface SeriesStore {
 	subscribe,
