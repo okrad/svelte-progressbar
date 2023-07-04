@@ -2,6 +2,8 @@
 A multi-series  SVG progress bar component made with Svelte 3.
 It can be rendered as a **linear**, **radial** (circular), **semicircular** or even **custom-shaped** progressbar. Progression bars and values are fully animated.
 
+NB I copied this from [okayrad](https://github.com/okrad/svelte-progressbar/), I just created this to publish a Svelte 4 compatible version. 
+
 If rendered as a linear progressbar there are 2 styles supported:
 * Standard: uses svg masks to display inverted text color for the value.
 * Thin: the progression bars are rendered as thin bars and the values are placed externally
@@ -19,7 +21,7 @@ The following are the main differences with the previous release:
 # Usage
 
 ```
-npm i @okrad/svelte-progressbar
+npm i @pete-y-cs/svelte4-progressbar
 ```
 
 Then you can use it like:
