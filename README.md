@@ -248,6 +248,9 @@ Take a look at these [working examples](https://okrad.github.io/svelte-progressb
 
 
 # Changelog
+2023/07/06: Version 2.2.0
+* Migration to Svelte 4
+
 2023/05/16: Version 2.1.1
 * Small fixes
 
